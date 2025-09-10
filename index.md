@@ -2,8 +2,6 @@
 title: Random Forest Capstone Project
 ---
 
-# RF Capstone Project
-
 **University of West Florida**  
 Master of Science in Data Science  
 Fall Semester 2025
@@ -19,7 +17,7 @@ The goal is to analyze data and demonstrate the application of Random Forest for
 
 ## Project Links
 
-- [Project README](README.md)  
+- [Project README](/readme/README.md)  
 - [Data Folder](data/)  
 - [Notebooks](notebooks/)  
 - [Source Code](src/)

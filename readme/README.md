@@ -1,4 +1,4 @@
-# Capstone Project: Random Forest Analysis
+# Decision Trees and Random Forest Analysis
 
 ## Overview
 This repository contains the capstone project for the Master’s Program at the **University of West Florida (UWF)**.  

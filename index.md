@@ -2,7 +2,7 @@
 title: Random Forest Capstone Project
 ---
 
-# RF Capstone Project
+# Capstone Project
 
 **University of West Florida**  
 Master of Science in Data Science  

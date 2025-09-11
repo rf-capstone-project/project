@@ -1,7 +1,7 @@
-# This page provides summaries of papers that applied the random forest methodology
+# This page presents summaries of research papers employing the random forest methodology.
 
 ## Articles
-- [Attack detection in IoMT networks](/articles/Attack Detection.md)
+- [Attack detection in IoMT networks](/Attack Detection.md)
 - [Articles](/articles/)
 - [Data Folder](data/)  
 - [Notebooks](notebooks/)  

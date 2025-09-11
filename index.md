@@ -17,7 +17,8 @@ The goal is to analyze data and demonstrate the application of Random Forest for
 
 ## Project Links
 
-- [Project README](/readme/README.md)  
+- [README](/readme/README.md)
+- [Articles](articles/)
 - [Data Folder](data/)  
 - [Notebooks](notebooks/)  
 - [Source Code](src/)

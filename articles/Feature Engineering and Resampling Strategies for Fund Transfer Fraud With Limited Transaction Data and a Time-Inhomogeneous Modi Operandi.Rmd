@@ -1,0 +1,6 @@
+---
+title: "Feature Engineering and Resampling Strategies for Fund Transfer Fraud With Limited Transaction Data and a Time-Inhomogeneous Modi Operandi"
+output: html_document
+---
+
+When looking at fraud within finanicial transactions, there is often a lot of noise. This paper explored methods to reduce and eliminate this noise based on feature engineering around recency, frequency, monetary, and anomaly (RFMA) identification statistics as well as employing time phased partitions for both the training and test sets to capture the ever changing nature of fraud patterns over time. In addition to these feature engineering methods, they also employed over/under sampling methods to address class imbalances. After employing these techniques, model performance did improve across the board - an important finding was the impact of feature engineering to identify non-fraud events using behavior and segmentation characteristics rather than solely focusing on fraud patterns and RFMA. Additionally, an important note is that chronologically partitioning the data for random forests increased precision, recall, and the F1 score but slightly decreased accuracy. This was due to the synthetic data generated during oversampling was without time phased partitions and thus treated all the points as similar compared to unique patterns in a specific period of time.

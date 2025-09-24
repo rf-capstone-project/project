@@ -4,7 +4,7 @@ title: Random Forest Capstone Project
 
 **University of West Florida**  
 Master of Science in Data Science  
-Fall Semester 2025
+Fall Semester 2025_
 
 ---
 

@@ -1,23 +1,36 @@
 ---
-title: "random_forest_main"
-format: html
+title: "Exploring Fraud Detection: An Analysis of the Random Forest Algorithm in Credit Card Transactions"
+authors: Jessica Cramer, Hunter Hillis, Murpys D. Mendez
+date: 2025-10-25
+format:
+  html:
+    code-fold: true 
+course: IDC 69407 - Capstone Projects in Data Science
+bibliography: references.bib # file contains bibtex for references
+link-citations: true
+self-contained: true
+execute: 
+  warning: false
+  message: false
 ---
 
-## Quarto
+[Website](https://rf-capstone-project.github.io/project/)
 
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+[Slides]()
 
-## Running Code
+## Introduction
+
+Random Forests (RF) is a supervised machine learning algorithm that is commonly used for classification and regression tasks. It was developed in the late 90s and gained prominence in the early 2000s, increasing its application in various scientific and industry fields. The popularity of tree-based methods in machine learning has increased exponentially, due to their capacity to produce reliable and readable results, while being flexible on the type of data they can handle [@Louppe2015]. Random Forests is an ensemble method that combines many decision trees to improve accuracy and robustness. The central idea is to synthesize the output of several weak-learners aggregating the results by means of a predefined voting scheme [@Khaleb2014]. The method's acceptance is also explained by the fact that it allows clearly defined criteria to be analyzed and does not behave as a black box. This is ideal for domains that often deal with regulatory scrutiny or have a need to develop deeper insights into their classification process.
+
+Advances in Random Forest theory have introduced several techniques aimed at enhancing performance, such as modifications to tree voting mechanisms and adjustments to the weighting of random samples used in tree construction. These innovations have been shown to significantly improve model accuracy, with each approach offering domain-specific refinements in voting, sampling, and related processes.
+
+## Method
 
 When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
 
-```{r}
-1 + 1 + 3 + 99
-```
+## Analysis and Results
 
-You can add options to executable code like this 
+## Conclusions
 
-```{r}
-#| echo: false
-2 * 2
-```
+## References
+

@@ -4,7 +4,8 @@ authors: Jessica Cramer, Hunter Hillis, Murpys D. Mendez
 date: 2025-10-25
 format:
   html:
-    code-fold: true 
+    code-fold: true
+    css: styles.css 
 course: IDC 69407 - Capstone Projects in Data Science
 bibliography: references.bib # file contains bibtex for references
 link-citations: true
@@ -16,17 +17,42 @@ execute:
 
 [Website](https://rf-capstone-project.github.io/project/)
 
-[Slides]()
+[Slides](https://rf-capstone-project.github.io/project/slides.html)
 
 ## Introduction
 
-Random Forests (RF) is a supervised machine learning algorithm that is commonly used for classification and regression tasks. It was developed in the late 90s and gained prominence in the early 2000s, increasing its application in various scientific and industry fields. The popularity of tree-based methods in machine learning has increased exponentially, due to their capacity to produce reliable and readable results, while being flexible on the type of data they can handle [@Louppe2015]. Random Forests is an ensemble method that combines many decision trees to improve accuracy and robustness. The central idea is to synthesize the output of several weak-learners aggregating the results by means of a predefined voting scheme [@Khaleb2014]. The method's acceptance is also explained by the fact that it allows clearly defined criteria to be analyzed and does not behave as a black box. This is ideal for domains that often deal with regulatory scrutiny or have a need to develop deeper insights into their classification process.
+Modern data problems often involve large and noisy datasets where simple predictive models fail to capture complex patterns. Random Forests address these challenges by combining the strengths of many decision trees into one powerful ensemble, providing a scalable approach across a wide range of domains, and is commonly used for classification and regression tasks.
+First developed in the late 1990s and popularized in the early 2000s, Random Forests (RF) improve predictive performance by aggregating the outputs of multiple decision trees built from randomly sampled subsets of data. In general, the popularity of tree-based methods in machine learning has increased exponentially, due to their capacity to produce reliable and readable results, while being flexible on the type of data they can handle [@Louppe2015]. Random Forest’s acceptance is also supported by the fact that it allows clearly defined criteria to be analyzed and does not behave as a black box. This is ideal for domains that often deal with regulatory scrutiny or have a need to develop deeper insights into their classification process. @Louppe2015 explains RF’s success based on the following factors:
 
-Advances in Random Forest theory have introduced several techniques aimed at enhancing performance, such as modifications to tree voting mechanisms and adjustments to the weighting of random samples used in tree construction. These innovations have been shown to significantly improve model accuracy, with each approach offering domain-specific refinements in voting, sampling, and related processes.
+- Non-parametric character, leading to flexible models.
+- Capacity for handling different types of data.
+- Decision trees perform feature selection, making them resilient to irrelevant or noisy variables.
+- Robustness to outliers or errors in the label variable.
+- Ease of interpretability.
+
+
+A Random Forest is a supervised learning algorithm that grows a forest of decision trees, each trained on a different bootstrap sample of the original dataset. At every split in a tree, only a random subset of predictors is considered, and the best split among those is chosen.
+For classification tasks the forest predicts the majority vote of its trees, while for regression, it outputs the average of their predictions. Once a splitting metric is determined, the feature that returns the highest impact to the model’s performance is selected as a branch originating from the root node. This continues until all of the dependent target variables have reached a leaf node. Once this process has been repeated a defined number of times, the trees that have been created are then aggregated together during the decision process and a prediction is made (typically based on majority class voting). This algorithm works by taking a collection of decision trees and applying ranked voting to create a prediction. This double layer of randomness using bootstrapped samples and random feature selection reduces correlation among trees and yields a model that is both accurate and resistant to overfitting.
+
+Over the years, researchers have refined the technique through alternative voting schemes, improved sampling strategies, algorithm combinations, and weighting adjustments to further enhance accuracy and adaptability. @Al-Abadi2023 combines clustering techniques (K-means) with the application of random forests models to substantially improve the robustness of Internet of Medical Things security systems, paving the way for more resilient and precise healthcare monitoring solutions. Malley et al, 2012, as cited in @Valavi2021, proposes the use of random forest regression, instead of the random forest classifier, to study species distribution data. In this line, the classes would be modeled as 0 and 1, and the results interpreted as probabilities in the range {0,1}
+
+While RF is widely regarded as an accurate and robust method, it does not lack vulnerabilities, one of the main being the method’s sensitivity towards class imbalance. @Valavi2021 proposes the following strategies to address the problem of class imbalance:
+
+**Applying weights.**
+The method tackles class imbalance by assigning higher weights (misclassification costs) to the minority class. These weights are incorporated into the Gini index in the randomForest package, affecting both the choice of splits and the weighting of terminal nodes in each tree. Different implementations of Random Forest may estimate weights differently, but the core idea is to make the model more sensitive to underrepresented classes.
+
+**Equal sampling.**
+Equal-sampling involves creating multiple datasets (from the original data). Separate Random Forest models are trained on each dataset, and the final prediction is obtained by averaging the predictions of all models. This approach, derived from repeated random sub-sampling in machine learning, reduces class overlap by limiting the dominance of the majority class.
+
+**Down sampling.**
+Down-sampling, also called balanced Random Forest, addresses class imbalance by creating a balanced training set for each individual tree. Each tree uses all minority-class samples and a randomly selected subset of majority-class samples equal in size to the minority. Because different trees may use different subsets, the method effectively incorporates many majority samples across the forest. This reduces class overlap and imbalance for each tree, improving model performance in species presence-background studies and other imbalanced classification tasks. This technique can be performed by adjusting parameter values in the RF implementation.
+
+One of the most popular methods to handle class imbalance is the Synthetic Minority Over-Sampling Technique (SMOTE). The process begins by selecting a sample from the minority class. After that, it measures the feature wise difference between this sample and one of its nearest neighbors. Finally, this difference is scaled by a random value ranging from 0 to 1 [@Zhang2024]. Previous studies show that when Random Forests are combined with this resampling method or other synthetic data generation techniques, they can achieve high precision and recall while keeping false positives manageable. @Shah2023, improves the classification of gravitational wave signals (GWs) against non-astrophysical noise, (glitches), by using a random forest algorithm combined with the SMOTE sampling technique. While @Alsharif2023 demonstrates that by integrating SMOTE for data balancing and optimizing RF hyperparameters, it's possible to develop a robust and efficient model for credit card fraud detection.
+
 
 ## Method
 
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+Here we will provide a detailed explanation of the mathematical foundation of thr method.
 
 ## Analysis and Results
 

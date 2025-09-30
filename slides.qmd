@@ -1,10 +1,9 @@
 ---
-title: "An Analysis of the Random Forest Algorithm in Credit Card Transactions"
+title: "An Analysis of Random Forest"
 author: "Jessica Cramer, Hunter Hillis, Murpys D. Mendez"
-date: '`r Sys.Date()`'
+date: 2025-10-25
 format:
   revealjs:
-    theme: dark
     scrollable: true
     smaller: true
     margin: 0.01
@@ -14,6 +13,7 @@ format:
     max-scale: 1.5
     view-distance: 30
     mobile-view-distance: 30
+    background: "#F8F8F8"
 editor: visual
 course: IDC 69407 - Capstone Projects in Data Science
 #bibliography: references.bib # file contains bibtex for references

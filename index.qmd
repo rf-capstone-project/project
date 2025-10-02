@@ -52,7 +52,7 @@ One of the most popular methods to handle class imbalance is the Synthetic Minor
 
 ## Method
 
-Here we will provide a detailed explanation of the mathematical foundation of thr method.
+Here we will provide a detailed explanation of the mathematical foundation of the method.
 
 ## Analysis and Results
 

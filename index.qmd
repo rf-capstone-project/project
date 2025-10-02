@@ -38,19 +38,21 @@ Over the years, researchers have refined the technique through alternative votin
 
 While RF is widely regarded as an accurate and robust method, it does not lack vulnerabilities, one of the main being the method’s sensitivity towards class imbalance. @Valavi2021 proposes the following strategies to address the problem of class imbalance:
 
-**Applying weights.**
+**Applying weights.**\
 The method tackles class imbalance by assigning higher weights (misclassification costs) to the minority class. These weights are incorporated into the Gini index in the randomForest package, affecting both the choice of splits and the weighting of terminal nodes in each tree. Different implementations of Random Forest may estimate weights differently, but the core idea is to make the model more sensitive to underrepresented classes.
 
-**Equal sampling.**
+**Equal sampling.**\
 Equal-sampling involves creating multiple datasets (from the original data). Separate Random Forest models are trained on each dataset, and the final prediction is obtained by averaging the predictions of all models. This approach, derived from repeated random sub-sampling in machine learning, reduces class overlap by limiting the dominance of the majority class.
 
-**Down sampling.**
+**Down sampling.**\
 Down-sampling, also called balanced Random Forest, addresses class imbalance by creating a balanced training set for each individual tree. Each tree uses all minority-class samples and a randomly selected subset of majority-class samples equal in size to the minority. Because different trees may use different subsets, the method effectively incorporates many majority samples across the forest. This reduces class overlap and imbalance for each tree, improving model performance in species presence-background studies and other imbalanced classification tasks. This technique can be performed by adjusting parameter values in the RF implementation.
 
-**Over Sampling **
+**Over Sampling **\
 One of the most popular methods to handle class imbalance is the Synthetic Minority Over-Sampling Technique (SMOTE). The process begins by selecting a sample from the minority class. After that, it measures the feature wise difference between this sample and one of its nearest neighbors. Finally, this difference is scaled by a random value ranging from 0 to 1 [@Zhang2024]. Previous studies show that when Random Forests are combined with this resampling method or other synthetic data generation techniques, they can achieve high precision and recall while keeping false positives manageable. @Shah2023, improves the classification of gravitational wave signals (GWs) against non-astrophysical noise, (glitches), by using a random forest algorithm combined with the SMOTE sampling technique. While @Alsharif2023 demonstrates that by integrating SMOTE for data balancing and optimizing RF hyperparameters, it's possible to develop a robust and efficient model for credit card fraud detection.
 
 Expanding on the SMOTE methodology, there have also been successful applications of integrating Global Adversarial Networks (GAN) to improve data sample quality. This integrated method continuously tests the synthetic data generated during the SMOTE process to determine if it can fool the GAN model a certain percentage of the time. In experimentation, once the sampling was able to fool the GAN model, the RF performance returned the highest performance compared to traditional methods of oversampling such as just using SMOTE (@Ghaleb2023).
+
+One last oversampling technique that has been shown to improve the model performance is the Iterative Nearest Neighborhood Oversampling (INNO) method. This method iteratively uses a small set of data samples and finds the distance between the samples to determine the density of the feature space and establishes a similarity score that is then used to apply to all the samples. This means that when there is more sample data in a certain feature space, there is a higher chance that the sample with the highest similarity score will be built upon and then this process repeats until the dataset meets a specific balance target. Although this was amongst multi-class targets, the results from this method showed that classification performance improved as the class imbalance ratio rose from 0.1 to 0.4 using INNO sampling (@Yu2015).
 
 ## Method
 

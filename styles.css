@@ -1,3 +1,10 @@
 body {
   background-color: #F8F8F8;
 }
+
+/* Make bibliography match page background */
+#quarto-appendix, #refs, .references, .csl-bib-body, .csl-entry {
+    background-color: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+}

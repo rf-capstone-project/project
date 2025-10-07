@@ -5,7 +5,7 @@ date: 2025-10-25
 format:
   html:
     code-fold: true
-    number-sections: true
+    number-sections: false
     css: styles.css 
 course: IDC 69407 - Capstone Projects in Data Science
 bibliography: references.bib # file contains bibtex for references
@@ -32,16 +32,14 @@ Modern data problems often involve large and noisy datasets where simple predict
 - Ease of interpretability.
 
 
-### Fraud Detection
 In recent years, research has continued to demonstrate how Random Forests can be adapted and improved to meet specific data challenges. For example, Nami and Shajari [@Nami2018] introduced a dynamic Random Forest combined with k-nearest neighbors to detect payment card fraud, prioritizing the prevention of financial loss rather than just model accuracy. This approach reduced fraud related losses by about 23% by focusing on recent transaction behavior and adapting to behavioral drift over time. Similarly, Flondor, Donath, and Neamțu [@Flondor2024] examined decision tree based approaches to credit card fraud detection using large datasets, identifying features such as transaction amount and merchant name as the most influential variables. Their findings emphasized that decision trees, while simple, remain highly interpretable and practical for real-time fraud detection.
 Other researchers have built upon these foundations to enhance Random Forest performance in imbalanced data settings. Lin and Jiang [@LinJiang2021] proposed an Autoencoder–Probabilistic Random Forest (AE-PRF) framework that first compresses input features through an autoencoder before applying a probabilistic ensemble. This hybrid achieved a true positive rate near 0.89 on a highly imbalanced credit card dataset, outperforming traditional models. Similarly, Sundaravadivel et al. [@Sundaravadivel2025] demonstrated that combining Synthetic Minority Over-Sampling Techniques (SMOTE) with Random Forests can significantly improve fraud detection precision and recall while maintaining low false-positive rates.
 
 
-### Additional Research
 Beyond fraud detection, foundational work such as that by Myles et al. [@Myles2004] continues to highlight the interpretability and flexibility of decision tree algorithms (including CART and C4.5), explaining how Random Forests inherit these advantages while overcoming overfitting issues common in single-tree models. Complementary overviews, such as the one presented by Salman, Kalakech, and Steiti [@Salman2024], further clarify that Random Forests extend the CART framework by building many trees on bootstrap samples and random feature subsets, improving resilience to noisy or incomplete data.
 Subsequent research has continued to refine RF techniques through alternative voting schemes, improved sampling strategies, algorithm combinations, and weighting adjustments aimed at enhancing accuracy and adaptability to specific domains [@Khaleb2014]. For instance, K-Means Clustering has been combined with RF in [@Al-Abadi2023] to improve security in Internet of Medical Things (IoMT) networks, which transmit sensitive patient data via connected sensors. The proposed methodology enhances the Random Forest algorithm (ERF) using Principal Component Analysis (PCA) for dimensionality reduction, reducing redundant features and execution time, while maintaining 99% accuracy and sensitivity. With optimized parameters (20 trees, 10 features per split, 80% sampling, and depth 25), the Enhanced Random Forest (ERF) outperformed AdaBoost and CatBoost. Additionally, Malley et al. (2012), as cited in [@Valavi2021], proposed using Random Forest regression instead of classification to model species distribution data, where classes are represented as 0 and 1 and interpreted as probabilities within the range {0, 1}.
 
-### Limitations
+
 While RF is widely regarded as an accurate and robust method, it does not lack vulnerabilities, one of the main being the method’s sensitivity towards class imbalance. To help with some of these shortcomings, several strategies address the problems of class imbalance, including:
 
 **Applying Weights**
@@ -56,7 +54,7 @@ Equal-sampling involves creating multiple datasets (from the original data). Sep
 
 Down-sampling, also called balanced Random Forest, addresses class imbalance by creating a balanced training set for each individual tree. Each tree uses all minority-class samples and a randomly selected subset of majority-class samples equal in size to the minority. Because different trees may use different subsets, the method effectively incorporates many majority samples across the forest. This reduces class overlap and imbalance for each tree, improving model performance in species presence-background studies and other imbalanced classification tasks. This technique can be performed by adjusting parameter values in the RF implementation [@Valavi2021].
 
-### Over Sampling
+
 One of the most popular methods to handle class imbalance is the Synthetic Minority Over-Sampling Technique (SMOTE) @fig-figure1 . The process begins by selecting a sample from the minority class. After that, it measures the feature wise difference between this sample and one of its nearest neighbors. Finally, this difference is scaled by a random value ranging from 0 to 1[@Zhang2024]. Previous studies show that when Random Forests are combined with this resampling method or other synthetic data generation techniques, they can achieve high precision and recall while keeping false positives manageable. An example is the improved classification of gravitational wave signals (GWs) against non-astrophysical noise (glitches), by using a Random Forest algorithm combined with the SMOTE sampling technique [@Shah2023]. A robust and efficient model for credit card fraud detection was developed by integrating SMOTE for data balancing and optimizing RF hyperparameters  [@Alsharif2023].
 
 :::{.text-center}
@@ -67,7 +65,7 @@ Expanding on the SMOTE methodology, there have also been successful applications
 
 One last oversampling technique that has been shown to improve the model performance is the Iterative Nearest Neighborhood Oversampling (INNO) method. This method iteratively uses a small set of data samples and finds the distance between the samples to determine the density of the feature space and establishes a similarity score that is then used to apply to all the samples. This means that when there is more sample data in a certain feature space, there is a higher chance that the sample with the highest similarity score will be built upon and then this process repeats until the dataset meets a specific balance target. Although this was amongst multi-class targets, the results from this method showed that classification performance improved as the class imbalance ratio rose from 0.1 to 0.4 using INNO sampling [@Yu2015].
 
-### Hyperparameters Tuning
+
 
 In addition to dataset balancing techniques, pruning techniques are also needed to eliminate noise and to improve performance by handling possible bias and variance from the sampling process. In [Zhou2021], it’s found that in low signal to noise domains, by reducing the depth of trees, the shallowness of trees is able to create noticeable gains in accuracy whereas with medium and high signal to noise ratios, there were no noticeable gains in model accuracy. This pruning technique not only demonstrated improved performance but also reduced the cost for training the model which has applications in resource constrained environments.
 

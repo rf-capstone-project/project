@@ -23,7 +23,11 @@ execute:
 
 ## Introduction
 
+<<<<<<< HEAD
 Modern data problems often involve large and noisy datasets where simple predictive models fail to capture complex patterns. Random Forests address these challenges by combining the strengths of many decision trees into one powerful ensemble, providing a scalable approach across a wide range of domains, and is commonly used for classification and regression tasks. First developed in the late 1990s and popularized in the early 2000s, Random Forests (RF) improve predictive performance by aggregating the outputs of multiple decision trees built from randomly sampled subsets of data. In general, the popularity of tree-based methods in machine learning has increased exponentially, due to their capacity to produce reliable and readable results, while being flexible on the type of data they can handle [@Louppe2015]. Random Forest’s acceptance is also supported by the fact that it allows clearly defined criteria to be analyzed and does not behave as a black box. This is ideal for domains that often deal with regulatory scrutiny or have a need to develop deeper insights into their classification process. The success of RFs is also explained based on the following factors [@Louppe2015]:
+=======
+Modern data problems often involve large and noisy datasets where simple predictive models fail to capture complex patterns. Random Forests address these challenges by combining the strengths of many decision trees into one powerful ensemble, providing a scalable approach across a wide range of domains, and is commonly used for classification and regression tasks.First developed in the late 1990s and popularized in the early 2000s, Random Forests (RF) improve predictive performance by aggregating the outputs of multiple decision trees built from randomly sampled subsets of data. In general, the popularity of tree-based methods in machine learning has increased exponentially, due to their capacity to produce reliable and readable results, while being flexible on the type of data they can handle (@Louppe2015). Random Forest’s acceptance is also supported by the fact that it allows clearly defined criteria to be analyzed and does not behave as a black box. This is ideal for domains that often deal with regulatory scrutiny or have a need to develop deeper insights into their classification process. @Louppe2015 explains RF’s success based on the following factors:
+>>>>>>> origin/main
 
 - Non-parametric character, leading to flexible models.
 - Capacity for handling different types of data.
@@ -32,6 +36,7 @@ Modern data problems often involve large and noisy datasets where simple predict
 - Ease of interpretability.
 
 
+<<<<<<< HEAD
 ### Fraud Detection
 In recent years, research has continued to demonstrate how Random Forests can be adapted and improved to meet specific data challenges. For example, Nami and Shajari [@Nami2018] introduced a dynamic Random Forest combined with k-nearest neighbors to detect payment card fraud, prioritizing the prevention of financial loss rather than just model accuracy. This approach reduced fraud related losses by about 23% by focusing on recent transaction behavior and adapting to behavioral drift over time. Similarly, Flondor, Donath, and Neamțu [@Flondor2024] examined decision tree based approaches to credit card fraud detection using large datasets, identifying features such as transaction amount and merchant name as the most influential variables. Their findings emphasized that decision trees, while simple, remain highly interpretable and practical for real-time fraud detection.
 Other researchers have built upon these foundations to enhance Random Forest performance in imbalanced data settings. Lin and Jiang [@LinJiang2021] proposed an Autoencoder–Probabilistic Random Forest (AE-PRF) framework that first compresses input features through an autoencoder before applying a probabilistic ensemble. This hybrid achieved a true positive rate near 0.89 on a highly imbalanced credit card dataset, outperforming traditional models. Similarly, Sundaravadivel et al. [@Sundaravadivel2025] demonstrated that combining Synthetic Minority Over-Sampling Techniques (SMOTE) with Random Forests can significantly improve fraud detection precision and recall while maintaining low false-positive rates.
@@ -77,10 +82,33 @@ Lastly, voting methods for RFs have continued to evolve over the years to more t
 In this paper, we apply Random Forests to classify card transactions as legitimate or fraudulent. To address the severe class imbalance, we experiment with resampling strategies and enhancements such as bagging, boosting, or cost-sensitive learning. We also evaluate the model using metrics beyond simple accuracy, such as precision, recall, F1-score, and area under the ROC curve to capture performance in a setting where false negatives carry significant monetary risk to the bottom line [Zhang2024]. The main goals of this paper are to explain the concept and underlying methodology of Random Forest decision trees and explore how its features enable effective applications such as credit card fraud detection.
 
 
+=======
+A Random Forest is a supervised learning algorithm that grows a forest of decision trees, each trained on a different bootstrap sample of the original dataset. At every split in a tree, only a random subset of predictors is considered, and the best split among those is chosen. For classification tasks the forest predicts the majority vote of its trees, while for regression, it outputs the average of their predictions. Once a splitting metric is determined, the feature that returns the highest impact to the model’s performance is selected as a branch originating from the root node. This continues until all of the dependent target variables have reached a leaf node. Once this process has been repeated a defined number of times, the trees that have been created are then aggregated together during the decision process and a prediction is made (typically based on majority class voting). This algorithm works by taking a collection of decision trees and applying ranked voting to create a prediction. This double layer of randomness using bootstrapped samples and random feature selection reduces correlation among trees and yields a model that is both accurate and resistant to overfitting.
 
+Over the years, researchers have refined the technique through alternative voting schemes, improved sampling strategies, algorithm combinations, and weighting adjustments to further enhance accuracy and adaptability. @Al-Abadi2023 combines clustering techniques (K-means) with the application of Random Forests models to substantially improve the robustness of Internet of Medical Things security systems, paving the way for more resilient and precise healthcare monitoring solutions. Malley et al, 2012, as cited in @Valavi2021, proposes the use of random forest regression, instead of the Random Forest classifier, to study species distribution data. In this line, the classes would be modeled as 0 and 1, and the results interpreted as probabilities in the range {0,1}. [**ADD MORE EXAMPLES HERE**]
+
+While RF is widely regarded as an accurate and robust method, it does not lack vulnerabilities, one of the main being the method’s sensitivity towards class imbalance. To address some of these shortcomings, @Valavi2021, @Yu2015, & @Ghaleb2023 proposed the following strategies to address the problems of class imbalance:
+
+**Applying weights.**\
+The method tackles class imbalance by assigning higher weights (misclassification costs) to the minority class. These weights are incorporated into the Gini index in the randomForest package, affecting both the choice of splits and the weighting of terminal nodes in each tree. Different implementations of Random Forest may estimate weights differently, but the core idea is to make the model more sensitive to underrepresented classes.
+
+**Equal sampling.**\
+Equal-sampling involves creating multiple datasets (from the original data). Separate Random Forest models are trained on each dataset, and the final prediction is obtained by averaging the predictions of all models. This approach, derived from repeated random sub-sampling in machine learning, reduces class overlap by limiting the dominance of the majority class.
+
+**Down sampling.**\
+Down-sampling, also called balanced Random Forest, addresses class imbalance by creating a balanced training set for each individual tree. Each tree uses all minority-class samples and a randomly selected subset of majority-class samples equal in size to the minority. Because different trees may use different subsets, the method effectively incorporates many majority samples across the forest. This reduces class overlap and imbalance for each tree, improving model performance in species presence-background studies and other imbalanced classification tasks. This technique can be performed by adjusting parameter values in the RF implementation.
+
+**Over Sampling **\
+One of the most popular methods to handle class imbalance is the Synthetic Minority Over-Sampling Technique (SMOTE). The process begins by selecting a sample from the minority class. After that, it measures the feature wise difference between this sample and one of its nearest neighbors. Finally, this difference is scaled by a random value ranging from 0 to 1 (@Zhang2024). Previous studies show that when Random Forests are combined with this resampling method or other synthetic data generation techniques, they can achieve high precision and recall while keeping false positives manageable. @Shah2023, improves the classification of gravitational wave signals (GWs) against non-astrophysical noise, (glitches), by using a Random Forest algorithm combined with the SMOTE sampling technique. While @Alsharif2023 demonstrates that by integrating SMOTE for data balancing and optimizing RF hyperparameters, it's possible to develop a robust and efficient model for credit card fraud detection.
+>>>>>>> origin/main
+
+Expanding on the SMOTE methodology, there have also been successful applications of integrating Global Adversarial Networks (GAN) to improve data sample quality. This integrated method continuously tests the synthetic data generated during the SMOTE process to determine if it can fool the GAN model a certain percentage of the time. In experimentation, once the sampling was able to fool the GAN model, the RF performance returned the highest performance compared to traditional methods of oversampling such as just using SMOTE (@Ghaleb2023).
+
+One last oversampling technique that has been shown to improve the model performance is the Iterative Nearest Neighborhood Oversampling (INNO) method. This method iteratively uses a small set of data samples and finds the distance between the samples to determine the density of the feature space and establishes a similarity score that is then used to apply to all the samples. This means that when there is more sample data in a certain feature space, there is a higher chance that the sample with the highest similarity score will be built upon and then this process repeats until the dataset meets a specific balance target. Although this was amongst multi-class targets, the results from this method showed that classification performance improved as the class imbalance ratio rose from 0.1 to 0.4 using INNO sampling (@Yu2015).
 
 ## Method
 
+<<<<<<< HEAD
 Random Forests is an ensemble method that combines many decision trees to improve accuracy and robustness in both classification and regression. The central idea is to grow many trees, each built on different randomization (bootstrap sampling + random feature selection), and then aggregate their predictions.
 
 ### Process
@@ -105,6 +133,9 @@ The process continues until all of the dependent target variables have reached a
 
 
 
+=======
+Here we will provide a detailed explanation of the mathematical foundation of the method.
+>>>>>>> origin/main
 
 ## Analysis and Results
 

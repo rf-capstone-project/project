@@ -51,7 +51,19 @@ table(missing_ids$isFraud)
 head(train_trans$TransactionID, 20)
 head(train_id$TransactionID, 20)
 
-
+# explore features values
+unique(train_trans$isFraud)
+unique(train_trans$ProductCD)
+head(train_trans$TransactionDT)
+head(train_trans$card1)
+head(train_trans$addr1)
+unique(train_trans$addr1)
+unique(train_trans$addr2)
+head(train_trans$dist1, 30)
+length(unique(train_trans$dist1))
+sum(is.na(train_trans$dist1))
+head(train_trans$dist2, 30)
+sum(is.na(train_trans$dist2))
 
 
 

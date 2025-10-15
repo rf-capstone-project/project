@@ -78,12 +78,22 @@ sum(is.na(train_trans$V15)) # 76073 missing
 # merging training sets
 train_merged <- merge(train_trans, train_id, by = "TransactionID")
 
+# working to reduce engineered columns V
+v_cols <- paste0("V", 1:339) # creates a vector with the names
+
+# replaces missing values
+for(col in v_cols){
+train_merged[[col]][is.na(train_merged[[col]])] <- mean(train_merged[[col]], na.rm = TRUE)
+}
+
+# removes constant columns
+v_cols <- v_cols[sapply(train_merged[, v_cols], function(x) sd(x, na.rm=TRUE) != 0)]
+
 # Run PCA on selected numeric columns
-v_cols <- paste0("V", 1:339)
 #pca_result <- PCA(train_trans[, v_cols], scale.unit = TRUE, graph = FALSE)
 
 #subset_scaled <- scale(train_trans[, v_cols])
-pca_result <- prcomp(train_trans, center = TRUE, scale. = TRUE)
+pca_result <- prcomp(train_merged[, v_cols], center = TRUE, scale. = TRUE)
 
 # Visualize variance explained
 fviz_eig(pca_result, 10)

@@ -1,5 +1,7 @@
 # Exploratory data analysis
-
+library(ggplot2)
+library(FactoMineR)
+library(factoextra)
 
 # get dataset
 train_trans <- read.csv("ieee-fraud-detection/train_transaction.csv")
@@ -9,6 +11,9 @@ test_id <- read.csv("ieee-fraud-detection/test_identity.csv")
 
 
 # exploration
+ncol(train_trans)
+ncol(train_id)
+nrow(train_trans)
 
 # list and explore features on train_transactions
 feature_info_trans <- data.frame(
@@ -52,6 +57,7 @@ head(train_trans$TransactionID, 20)
 head(train_id$TransactionID, 20)
 
 # explore features values
+# transaction table
 unique(train_trans$isFraud)
 unique(train_trans$ProductCD)
 head(train_trans$TransactionDT)
@@ -64,9 +70,26 @@ length(unique(train_trans$dist1))
 sum(is.na(train_trans$dist1))
 head(train_trans$dist2, 30)
 sum(is.na(train_trans$dist2))
+head(train_trans$dist2, 30)
+head(train_trans$P_emaildomain, 30)
+sum(is.na(train_trans$V1)) # 279287 missing
+sum(is.na(train_trans$V15)) # 76073 missing
 
+# merging training sets
+train_merged <- merge(train_trans, train_id, by = "TransactionID")
 
+# Run PCA on selected numeric columns
+v_cols <- paste0("V", 1:339)
+#pca_result <- PCA(train_trans[, v_cols], scale.unit = TRUE, graph = FALSE)
 
+#subset_scaled <- scale(train_trans[, v_cols])
+pca_result <- prcomp(train_trans, center = TRUE, scale. = TRUE)
+
+# Visualize variance explained
+fviz_eig(pca_result, 10)
+
+# Visualize individuals and variables
+fviz_pca_biplot(pca_result)
 
 
 

@@ -1,7 +1,5 @@
 # Exploratory data analysis
 library(ggplot2)
-library(FactoMineR)
-library(factoextra)
 library(dplyr)
 
 # get dataset
@@ -81,78 +79,92 @@ sum(is.na(train_trans$V15)) # 76073 missing
 # merging training sets
 train_merged <- merge(train_trans, train_id, by = "TransactionID")
 
-## working to reduce engineered columns V
+## working to reduce columns V
 ## ------------------------------------------------------------------------
 v_cols <- paste0("V", 1:339) # creates a vector with the names
+
+
+for (col in v_cols) {
+  sum <- check_na(col)
+  cat(col, sum, "\n")
+}
+
+# remove V columns with excessive missing values
+v_cols <- v_cols[-c(1:94, 138:166, 322:339)]
+
+v_cols
 
 # replaces missing values
 for(col in v_cols){
 train_merged[[col]][is.na(train_merged[[col]])] <- mean(train_merged[[col]], na.rm = TRUE)
 }
 
-# removes constant columns from vector
-v_cols <- v_cols[sapply(train_merged[, v_cols], function(x)
-  !is.na(sd(x, na.rm = TRUE)) && sd(x, na.rm = TRUE) != 0)]
+# checking for constant colmuns
+for (col in v_cols) {
+  if (is.na(sd(train_merged[[col]])))
+    print(col)
+  }
 
-# Identify columns that match V<number> and are NOT in v_cols
-drop_cols <- names(train_merged)[grepl("^V[0-9]+$", names(train_merged)) & 
-                                   !names(train_merged) %in% v_cols]
 
-# Remove them from the dataset
-train_merged <- train_merged[, !names(train_merged) %in% drop_cols, drop = FALSE]
-
-## Run PCA on selected numeric columns
+## Run PCA
 pca_result <- prcomp(train_merged[, v_cols], center = TRUE, scale. = TRUE)
 summary(pca_result)
 
-# keeping the first 18 PCs explaining 72.18% of the variance
-train_pca <- pca_result$x[, 1:18, drop = FALSE]
-# convert to dataframe
-train_pca <- as.data.frame(train_pca)
+# keeping the first 10 PCs explaining 72.10% of the variance
+train_pca_df <- as.data.frame(pca_result$x)
+train_pca <- select(train_pca_df, 1:10)
+
 
 # remove v colmuns from data
 train_merged <- train_merged[, !grepl("^V[0-9]+$", names(train_merged)), drop = FALSE]
 head(train_merged, 10)
 
-v_cols
 
-
-#----------------------------------
+# functions
+#------------------------------------------
 check_na <- function(feature) {
   n <- sum(is.na(train_merged[[feature]]))
   return(n)  
 }
 
 
+drop_f <- function(feature) {
+  train_merged[, !(names(train_merged) %in% feature)]
+}
+# end functions
 
 
-## checking features in merged data
+
+## check features cont
 ## ----------------------------------------------------------------
 sum(is.na(train_merged$dist1))  # 144233 missing
 # dropping dist1
-train_merged <- train_merged %>%
-  select(-dist1)
+train_merged <- drop_f("dist1")
 
 # dist2
 sum(is.na(train_merged$dist2))  # 106640 missing
 # dropping dist2
-train_merged <- train_merged %>%
-  select(-dist2)
+train_merged <- drop_f("dist2")
 
 # addr1
 sum(is.na(train_merged$addr1))  # 60447 missing
+# dropping addr1
+train_merged <- drop_f("addr1")
 
 # addr2
 sum(is.na(train_merged$addr2))   # 60447 missing
-
-# addr2
-sum(is.na(train_merged$addr2))   # 60447 missing
-
+# dropping addr2
+train_merged <- drop_f("addr2")
 
 # D columns
 # ------------------------------------------------
 sum(is.na(train_merged$D1))  # 106640 missing
 d_cols <- paste0("D", 1:15) # creates a vector with the names
+
+for (col in d_cols) {
+  sum <- check_na(col)
+  cat(col, sum, "\n")
+}
 
 # D1 218 
 # D2 113117 

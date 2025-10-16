@@ -101,10 +101,13 @@ train_merged[[col]][is.na(train_merged[[col]])] <- mean(train_merged[[col]], na.
 
 # checking for constant colmuns
 for (col in v_cols) {
-  if (is.na(sd(train_merged[[col]])))
+  if (sd(train_merged[[col]]) == 0)
     print(col)
   }
 
+# remove constant columns
+v_cols <- v_cols[v_cols != c("V107", "V305")]
+v_cols
 
 ## Run PCA
 pca_result <- prcomp(train_merged[, v_cols], center = TRUE, scale. = TRUE)
@@ -131,34 +134,43 @@ check_na <- function(feature) {
 drop_f <- function(feature) {
   train_merged[, !(names(train_merged) %in% feature)]
 }
+
+
+# replaces missing values
+
+na_fill <- function(col) {
+  train_merged[[col]][is.na(train_merged[[col]])] <- mean(train_merged[[col]], na.rm = TRUE)
+  return(train_merged)
+}  
+
 # end functions
+# -------------------------------------------
 
 
 
 ## check features cont
 ## ----------------------------------------------------------------
-sum(is.na(train_merged$dist1))  # 144233 missing
-# dropping dist1
-train_merged <- drop_f("dist1")
 
+# dist1
+sum(is.na(train_merged$dist1))  # 144233 missing
 # dist2
 sum(is.na(train_merged$dist2))  # 106640 missing
-# dropping dist2
-train_merged <- drop_f("dist2")
-
 # addr1
 sum(is.na(train_merged$addr1))  # 60447 missing
-# dropping addr1
-train_merged <- drop_f("addr1")
-
 # addr2
 sum(is.na(train_merged$addr2))   # 60447 missing
+
+# dropping dist1
+train_merged <- drop_f("dist1")
+# dropping dist2
+train_merged <- drop_f("dist2")
+# dropping addr1
+train_merged <- drop_f("addr1")
 # dropping addr2
 train_merged <- drop_f("addr2")
 
 # D columns
 # ------------------------------------------------
-sum(is.na(train_merged$D1))  # 106640 missing
 d_cols <- paste0("D", 1:15) # creates a vector with the names
 
 for (col in d_cols) {
@@ -182,9 +194,149 @@ for (col in d_cols) {
 # D14 82068 
 # D15 75916 
 
-dcols_drop <- d_cols[-1] 
-
+dcols_drop <- d_cols[-1]
 train_merged <- train_merged[, !names(train_merged) %in% dcols_drop, drop = FALSE]
 
- 
+# emails
+sum((train_merged$P_emaildomain) == "")
+sum((train_merged$R_emaildomain) == "")
+d_cols
 
+# M columns
+# ------------------------------------------------
+m_cols <- paste0("M", 1:9) # creates a vector with the names
+
+for (col in m_cols) {
+  sum <- check_na(col)
+  cat(col, sum, "\n")
+}
+
+# M1 144233 
+# M2 144233 
+# M3 144233 
+# M4 0 
+# M5 144233 
+# M6 144233 
+# M7 144233 
+# M8 144233 
+# M9 144233
+
+mcols_drop <- m_cols[-4]
+train_merged <- train_merged[, !names(train_merged) %in% mcols_drop, drop = FALSE]
+
+
+# id columns
+# ------------------------------------------------
+
+id_cols <- paste0("id_", sprintf("%02d", 1:38)) # creates a vector with the names
+id_cols
+
+for (col in id_cols) {
+  sum <- check_na(col)
+  cat(col, sum, "\n")
+}
+
+# id_01 0 
+# id_02 3361 
+# id_03 77909 
+# id_04 77909 
+# id_05 7368 
+# id_06 7368 
+# id_07 139078 
+# id_08 139078 
+# id_09 69307 
+# id_10 69307 
+# id_11 3255 
+# id_12 0 
+# id_13 16913 
+# id_14 64189 
+# id_15 0 
+# id_16 0 
+# id_17 4864 
+# id_18 99120 
+# id_19 4915 
+# id_20 4972 
+# id_21 139074 
+# id_22 139064 
+# id_23 0 
+# id_24 139486 
+# id_25 139101 
+# id_26 139070 
+# id_27 0 
+# id_28 0 
+# id_29 0 
+# id_30 0 
+# id_31 0 
+# id_32 66647 
+# id_33 0 
+# id_34 0 
+# id_35 3248 
+# id_36 3248 
+# id_37 3248 
+# id_38 3248 
+
+idcols_drop <- id_cols[-c(1,2,5,6,11,12,15,16,23,c(27:31),c(33:38))]
+train_merged <- train_merged[, !names(train_merged) %in% idcols_drop, drop = FALSE]
+
+train_merged <- na_fill("id_05")
+train_merged <- na_fill("id_06")
+
+head(train_merged,20)
+unique(train_merged$id_23)
+sum((train_merged$id_23)=="") # 139064 blank values
+train_merged <- drop_f("id_23")
+
+unique(train_merged$id_30)
+unique(train_merged$M4)
+sum((train_merged$M4)=="")
+
+train_merged <- drop_f("M4")
+
+sum((train_merged$id_27)=="")
+train_merged <- drop_f("id_27")
+
+train_merged <- na_fill("id_02")
+train_merged <- na_fill("id_11")
+
+ncol(train_merged)
+
+
+# Combine train_merged (other columns) with the selected PCs
+train_final <- cbind(train_merged, train_pca)
+
+final_features <- colnames(train_final)
+
+final_features
+
+# test set
+# -----------------------------------------------------------------------
+test_merged <- merge(test_trans, test_id, by = "TransactionID")
+test_cols <- colnames(test_merged)
+test_cols
+
+# removes unusable v cols
+test_merged <- test_merged[, !(grepl("^V[0-9]+$", names(test_merged)) & !names(test_merged) %in% v_cols)]
+
+# replaces missing values
+for(col in v_cols){
+  test_merged[[col]][is.na(test_merged[[col]])] <- mean(test_merged[[col]], na.rm = TRUE)
+}
+
+# pca
+test_pca <- predict(pca_result, newdata = test_merged[, v_cols])
+test_pca <- as.data.frame(test_pca[, 1:10, drop = FALSE])
+
+# Keep only the columns that exist in the training data
+test_merged <- test_merged[, intersect(names(test_merged), names(train_merged)), drop = FALSE]
+
+head(test_merged)
+
+test_pca
+
+# Combine original test data with PCA results
+test_final <- cbind(test_merged, test_pca)
+
+# exporting data
+write.csv(train_final, "train_final.csv", row.names = FALSE)
+write.csv(test_final, "test_final.csv", row.names = FALSE)
+nrow(test_final)

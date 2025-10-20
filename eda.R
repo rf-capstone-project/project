@@ -1,6 +1,7 @@
 # Exploratory data analysis
 library(ggplot2)
 library(dplyr)
+library(naniar)
 
 # get dataset
 train_trans <- read.csv("ieee-fraud-detection/train_transaction.csv")

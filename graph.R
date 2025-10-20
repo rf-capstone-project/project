@@ -5,7 +5,6 @@
 # set up
 library(dplyr)
 library(ggplot2)
-library(missForest)
 library(naniar)
 library(corrplot)
 library(caret)
@@ -75,6 +74,8 @@ unique(train_final$isFraud)
 unique(train_final$P_emaildomain)
 unique(train_final$DeviceType)
 unique(train_final$DeviceInfo)
+nrow(train_final)
+ncol(train_final)
 
 # -----------------------------------------------------------------------------
 # graphs
@@ -153,6 +154,7 @@ ggplot(train_final, aes(x = DeviceType, fill = factor(isFraud))) +
 
 
 # correlation matrix
+num_cols <- names(train_final)[sapply(train_final, is.numeric)]
 cmat <- cor(train_final[, num_cols], use = "pairwise.complete.obs")
 cmat[is.na(cmat)] <- 0  # replace NAs
 high_corr <- findCorrelation(cmat, cutoff = 0.9)

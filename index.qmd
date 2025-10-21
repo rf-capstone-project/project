@@ -51,47 +51,67 @@ In this paper, we apply Random Forests to classify card transactions as legitima
 
 ## Method
 
-Random Forests is an ensemble method that combines many decision trees to improve accuracy and robustness in both classification and regression. The central idea is to grow many trees, each built on different randomization (bootstrap sampling + random feature selection), and then aggregate their predictions.
+Random Forests is an ensemble method that combines many decision trees to improve accuracy and robustness in both classification and regression. The central idea is to grow many trees, each built on different randomization (bootstrap sampling + random feature selection), and then aggregate their predictions. The process continues until all of the dependent target variables have reached a leaf node. Once this process has been repeated a defined number of times, the trees that have been created are aggregated during the decision process and a prediction is made.
 
-### Process
+***Process***
 
-**Training:**
-Each tree is built on a bootstrap sample of the data. At each node, instead of using all predictors, a random subset of features is chosen, and the best split among them is selected.
-
-**Prediction:**
-
-- Classification: final output is the majority vote of the trees.
-  
-- Regression: final output is the average of the tree predictions.
+- Training:  
+  - Each tree is built on a bootstrap sample of the data. At each node, instead of using all predictors, a random subset is chosen, and the best split among them is selected (Figure 1).
+- Prediction:  
+  - Classification: final output is the majority vote of the trees.  
+  - Regression: final output is the average of the tree predictions.
 
 
-Each decision tree can be denoted by:
+:::{.text-center}
+![A Binary classification tree. (adapted from Louppe, 2015, inspired by Breiman, 2001).](images/desicionTree.png){#fig-figure1}
 
-$$h(X, Θk)$$
+:::
 
-where $Θk$ represents the randomness from bootstrapping and feature selection  [@Breiman2001].
+Formally, [@Breiman2001] defines a Random Forest as a collection of classifiers:
 
+
+$$\{h(x, \Theta_k), \; k = 1, \ldots, K\}$$
+Where each $\Theta_k$ represents a vector of random variables involving both bootstrap sampling and random feature selection. The RF prediction can be written as follows:
+
+$$
+\hat{f}(x) = \text{majority vote}\{h(x,\Theta_k)\}, \; k = 1, \ldots, K
+$$
+
+
+In the tree building process an impurity measure $i(t)$ evaluates the quality of a node $t$, with smaller values indicating purer nodes and therefore better predictions $\hat{f}_t(x)$
+
+
+***Splitting Criteria***
+
+Classification
+Impurity function based on the Shannon Entropy  (Shannon and Weaver, 1949, as cited in [@Louppe2015]):
+
+$$  i_H(t)=-\sum_{k=1}^{J}p(c_k|t)log_2(p(c_k|t))  $$
+Impurity function based on the Gini index (Gini, 1912, as cited in [@Louppe2015]:
+
+$$  i+G(t)=-\sum_{k=1}^{J}p(c_k|t)(1-p(c_k|t))  $$
 
 ***Approaches to class imbalance***
 
 
-- Applying Weights. The method tackles class imbalance by assigning higher weights (misclassification costs) to the minority class. These weights are incorporated into the Gini index in the randomForest package, affecting both the choice of splits and the weighting of terminal nodes in each tree [@Valavi2021]. Different implementations of Random Forest may estimate weights differently, but the core idea is to make the model more sensitive to underrepresented classes.
+- Applying Weights: Higher weights are assigned to the minority class and incorporated into the Gini index, affecting both the choice of splits and the weighting of terminal nodes in each tree [@Valavi2021].
+- Equal Sampling: Involves creating multiple datasets (from the original data). Separate Random Forest models are trained on each dataset, and the final prediction is obtained by averaging the predictions of all models [@Valavi2021].
 
-- Equal Sampling. Equal-sampling involves creating multiple datasets (from the original data). Separate Random Forest models are trained on each dataset, and the final prediction is obtained by averaging the predictions of all models. This approach, derived from repeated random sub-sampling in machine learning, reduces class overlap by limiting the dominance of the majority class [@Valavi2021].
+- Down Sampling: Each tree uses all minority-class samples and a randomly selected subset of majority-class samples equal in size to the minority. Because different trees may use different subsets, the method effectively incorporates many majority samples across the forest [@Valavi2021].
 
-- Down Sampling. Down-sampling, also called balanced Random Forest, addresses class imbalance by creating a balanced training set for each individual tree. Each tree uses all minority-class samples and a randomly selected subset of majority-class samples equal in size to the minority. Because different trees may use different subsets, the method effectively incorporates many majority samples across the forest. This reduces class overlap and imbalance for each tree, improving model performance in species presence-background studies and other imbalanced classification tasks. This technique can be performed by adjusting parameter values in the RF implementation [@Valavi2021].
+- Synthetic Minority Over-Sampling Technique (SMOTE) (Figure 2). The process begins by selecting a sample from the minority class. After that, it measures the feature wise difference between this sample and one of its nearest neighbors. Finally, this difference is scaled by a random value ranging from 0 to 1[@Zhang2024].
 
-
-One of the most popular methods to handle class imbalance is the ***Synthetic Minority Over-Sampling Technique*** (SMOTE) @fig-figure1 . The process begins by selecting a sample from the minority class. After that, it measures the feature wise difference between this sample and one of its nearest neighbors. Finally, this difference is scaled by a random value ranging from 0 to 1[@Zhang2024]. Previous studies show that when Random Forests are combined with this resampling method or other synthetic data generation techniques, they can achieve high precision and recall while keeping false positives manageable. An example is the improved classification of gravitational wave signals (GWs) against non-astrophysical noise (glitches), by using a Random Forest algorithm combined with the SMOTE sampling technique [@Shah2023]. A robust and efficient model for credit card fraud detection was developed by integrating SMOTE for data balancing and optimizing RF hyperparameters  [@Alsharif2023].
 
 :::{.text-center}
-![Illustration of the Synthetic Minority Oversampling Technique.](images/smote.png){#fig-figure1}
+![Illustration of the Synthetic Minority Oversampling Technique.](images/smote1.png){#fig-figure2}
 :::
 
 Expanding on the SMOTE methodology, there have also been successful applications of integrating Global Adversarial Networks (GAN) to improve data sample quality. This integrated method continuously tests the synthetic data generated during the SMOTE process to determine if it can fool the GAN model a certain percentage of the time. In experimentation, once the sampling was able to fool the GAN model over 50% of the time, the RF trained with this data returned the highest performance compared to traditional methods of oversampling, such as just using SMOTE [@Ghaleb2023].
 
 One last oversampling technique that has been shown to improve the model performance is the Iterative Nearest Neighborhood Oversampling (INNO) method. This method iteratively uses a small set of data samples and finds the distance between the samples to determine the density of the feature space and establishes a similarity score that is then used to apply to all the samples. This means that when there is more sample data in a certain feature space, there is a higher chance that the sample with the highest similarity score will be built upon and then this process repeats until the dataset meets a specific balance target. Although this was amongst multi-class targets, the results from this method showed that classification performance improved as the class imbalance ratio rose from 0.1 to 0.4 using INNO sampling [@Yu2015].
 
+
+Beyond sampling strategies, Random Forests use internal validation methods such as Out-of-Bag (OOB) error estimation. During training, each bootstrap sample leaves out about a third of the observations, which can then be used to evaluate model performance without needing a separate validation set. This approach provides an unbiased measure of error and helps to refine parameters such as tree depth and the number of features considered at each split.
 
 
 In addition to dataset balancing techniques, pruning techniques are also needed to eliminate noise and to improve performance by handling possible bias and variance from the sampling process. In [Zhou2021], it’s found that in low signal to noise domains, by reducing the depth of trees, the shallowness of trees is able to create noticeable gains in accuracy whereas with medium and high signal to noise ratios, there were no noticeable gains in model accuracy. This pruning technique not only demonstrated improved performance but also reduced the cost for training the model which has applications in resource constrained environments.
@@ -100,6 +120,187 @@ In addition to dataset balancing techniques, pruning techniques are also needed 
 
 
 ## Analysis and Results
+
+
+***Data Description***
+
+The used dataset, publicly available on Kaggle, was provided by Vesta Corporation, a payment processing company. It comprises real-world e-commerce transactions and includes a variety of features ranging from device type to product attributes. Additionally, as this dataset was generated from actual transaction data, many of its features have been masked to protect user privacy. In order to overcome this masking, we have used descriptive, summary information to identify the likely information these fields contain and map them to the appropriate type of information. Table 1 illustrates the features.
+
+
+| Type of Variable | Variable Name | Description |
+|------------------|----------------|--------------|
+| Binary | isFraud | The target label (0 or 1) indicating whether the transaction was fraudulent or not |
+| Date | TransactionDT | The time difference (in seconds) from a reference point (i.e. a “baseline” timestamp) — not an absolute timestamp |
+| Continuous | TransactionAmt | The amount (in USD) of the transaction |
+| Categorical | ProductCD | A categorical code indicating the type of product associated with the transaction |
+| Categorical | card1–card6 | A masked attribute about the payment card (e.g. issuer, category, country) used in the transaction |
+| Descriptive | P_emaildomain | The purchaser’s (sender’s) email domain (e.g. “gmail.com”, etc.) |
+| Descriptive | R_emaildomain | The receiver’s (payee’s) email domain |
+| Continuous | C1–C14 | An anonymized count (frequency metrics) capturing how many times some relevant event/entity combination has occurred historically or in relation to that transaction |
+| Continuous | Id_01, id_02, id_05, id_06, id_11 | Masked variables that likely represent continuous identity metrics (e.g. score, risk metric, count, rating) |
+| Descriptive | id_12, id_15, id_16, id_28, id_29, id_30, id_31, id_33, id_34, id_35, id_36, id_37, id_38 | Masked variables that likely represent encoded device info, IP domains, browser types, OS versions, network identifiers, or anonymized hashing of identity attributes |
+| Descriptive | DeviceType | A categorical descriptor of the type of device used in the transaction (e.g. “desktop”, “mobile”) |
+| Descriptive | DeviceInfo | Further device information (e.g. device model, browser, OS) as a masked categorical string |
+| Continuous | PC1–PC10 | PCA variables that were transformed from highly dimensional values from V1–V339 |
+
+        Table 1: IEEE-CIS Fraud Detection Data.
+        
+***Data Cleaning***
+
+The original dataset was provided in two tables ( Transactions and Identity), related by the variable TransactionID. A quick exploration revealed that not every record in Transaction, had a corresponding entry in the Identity set. The tables were merged dropping the rows with no match. This reduced the data to 144233 records.
+
+```{r}
+#| eval: false
+#| echo: true
+# merging training sets
+train_merged <- merge(train_trans, train_id, by = "TransactionID")
+
+```
+
+PCA was applied to a subset of the original features (Vesta engineered  variables V1-V339), resulting in 10 principal components to explain the majority of the variance from these features.
+
+```{r}
+#| eval: false
+#| echo: true
+# Run PCA
+pca_result <- prcomp(train_merged[, v_cols], center = TRUE, scale. = TRUE)
+summary(pca_result)
+# keeping the first 10 PCs explaining 72.10% of the variance
+train_pca_df <- as.data.frame(pca_result$x)
+train_pca <- select(train_pca_df, 1:10)
+
+```
+
+Features with large percentage of missing values were verified and dropped.
+
+```{r}
+#| eval: false
+#| echo: true
+miss_var_summary(train_merged) %>% print(n = Inf) # summarize missing values
+train_merged <- drop_f("dist1")
+# dropping dist2
+train_merged <- drop_f("dist2")
+# dropping addr1
+train_merged <- drop_f("addr1")
+
+```
+
+Example of handling the sequential generic features (e.g. D1...D15, id_1...id_38)
+
+
+```{r}
+#| eval: false
+#| echo: true
+d_cols <- paste0("D", 1:15) # creates a vector with the names
+dcols_drop <- d_cols[-1]
+train_merged <- train_merged[, !names(train_merged) %in% dcols_drop, drop = FALSE]
+
+```
+
+Example of verifying and removing constant columns.
+
+```{r}
+#| eval: false
+#| echo: true
+v_cols <- paste0("V", 1:339) # creates a vector with the names
+# checking for constant colmuns
+for (col in v_cols) {
+  if (sd(train_merged[[col]]) == 0)
+    print(col)
+  }
+
+# remove constant columns
+v_cols <- v_cols[v_cols != c("V107", "V305")]
+
+```
+
+The missing numeroc values were filled with the column mean. While the categorical missing values were filled with a level called "unknown".
+
+```{r}
+#| eval: false
+#| echo: true
+
+# fill numeric missing values
+train_final[] <- lapply(train_final, function(col) {
+  if (is.numeric(col)) {
+    col[is.na(col)] <- mean(col, na.rm = TRUE)
+  }
+  col
+})
+
+# fill categorical missing values
+train_final[] <- lapply(train_final, function(col) {
+  if (is.character(col)) {
+    col[is.na(col)] <- "unknown"
+  }
+  col
+})
+
+```  
+<p>&nbsp;</p>
+
+
+Following data preprocessing, the distribution of the target variable between its two levels is shown below, with 92.15% non fraud vs 7.95% fraud cases.  
+
+<p>&nbsp;</p>
+
+:::{.text-center}
+![Count of target variable per level.](images/fraudLevels.png){#fig-figure3}
+:::  
+
+<p>&nbsp;</p>
+
+Transacction amount distribution.
+
+:::{.text-center}
+![](images/transAmountDist.png){#fig}
+:::  
+
+<p>&nbsp;</p>
+
+Transacction amount distribution per fraud level.
+
+:::{.text-center}
+![](images/notitle/transAmountByFraud.png){#fig}
+:::  
+
+<p>&nbsp;</p>
+
+Continuing with the visualizations, this section explores additional aspects of the dataset through a series of graphical representations. These images highlight the relationship of the categorical features with the target variable.
+
+
+:::{.text-center}
+![Fraud by Card Type.](images/notitle/fraudByCardType.png){#fig-figure4}
+
+:::  
+
+<p>&nbsp;</p>
+
+:::{.text-center}
+![Fraud by Payment Network.](images/notitle/fraudByNetwork.png){#fig-figure5}
+
+:::  
+
+<p>&nbsp;</p>
+
+
+:::{.text-center}
+![Fraud by Device Type.](images/notitle/fraudByDeviceType.png){#fig-figure6}
+
+:::  
+
+<p>&nbsp;</p>
+
+:::{.text-center}
+![Fraud by Product.](images/notitle/fraudByProduct.png){#fig-figure7}
+
+:::
+
+
+
+
+
+
 
 ## Conclusions
 

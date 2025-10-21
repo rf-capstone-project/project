@@ -10,7 +10,7 @@ library(corrplot)
 library(caret)
 options(scipen = 999)
 
-train_final <- read.csv("ieee-fraud-detection/train_final.csv")
+train_final <- read.csv("ieee-fraud-detection/train_final_2.csv")
 
 
 # Inspect data
@@ -104,24 +104,19 @@ ggplot(train_final, aes(x = TransactionAmt)) +
 # ProductCD vs Fraud
 ggplot(train_final, aes(x = ProductCD, fill = factor(isFraud))) +
   geom_bar(position = "dodge", alpha = 0.6) + 
-  labs(y = "Count", title = "ProductCD vs Fraud", fill = "Fraud Status")
+  labs(y = "Count", title = "", fill = "Fraud Status")
   
 
 # card4(network) vs Fraud
 ggplot(train_final, aes(x = card4, fill = factor(isFraud))) +
   geom_bar(position = "dodge", alpha = 0.6) +
-  labs(y = "Count", title = "Payment Network vs Fraud", x = "Payment Network", fill = "Fraud Status")
+  labs(y = "Count", title = "", x = "Payment Network", fill = "Fraud Status")
 
 # card6(card type) vs Fraud
 ggplot(train_final, aes(x = card6, fill = factor(isFraud))) +
   geom_bar(position = "dodge", alpha = 0.6) +
-  labs(y = "Count", title = "Card Type vs Fraud", x = "Card Type", fill = "Fraud Status")
+  labs(y = "Count", title = "", x = "Card Type", fill = "Fraud Status")
 
-
-# P_emaildomain vs Fraud
-ggplot(train_final, aes(x = P_emaildomain, fill = factor(isFraud))) +
-  geom_bar(position = "dodge", alpha = 0.6) +
-  labs(y = "Count", title = "Fraud by Email Domain", x = "Domain", fill = "Fraud Status")
 
 # top purchaser email domains
 train_final %>%
@@ -133,7 +128,7 @@ train_final %>%
   ggplot(aes(x = reorder(P_emaildomain, FraudRate), y = FraudRate)) +
   geom_col(fill = "lightblue4") +
   coord_flip() +
-  labs(x = "Email Domain", y = "Fraud Rate", title = "Top Purchaser Email Domains by Fraud Rate")
+  labs(x = "Email Domain", y = "Fraud Rate", title = "")
 
 # top recipient  email domains
 train_final %>%
@@ -145,22 +140,22 @@ train_final %>%
   ggplot(aes(x = reorder(R_emaildomain, FraudRate), y = FraudRate)) +
   geom_col(fill = "lightblue4") +
   coord_flip() +
-  labs(x = "Email Domain", y = "Fraud Rate", title = "Top Recipient Email Domains by Fraud Rate")
+  labs(x = "Email Domain", y = "Fraud Rate", title = "")
 
 # device type vs Fraud
 ggplot(train_final, aes(x = DeviceType, fill = factor(isFraud))) +
   geom_bar(position = "dodge", alpha = 0.6) +
-  labs(y = "Count", title = "Fraud by Device Type", x = "Device", fill = "Fraud Status")
+  labs(y = "Count", title = "", x = "Device", fill = "Fraud Status")
 
 
 # correlation matrix
-num_cols <- names(train_final)[sapply(train_final, is.numeric)]
-cmat <- cor(train_final[, num_cols], use = "pairwise.complete.obs")
+num_cols <- names(train_final_2)[sapply(train_final_2, is.numeric)]
+cmat <- cor(train_final_2[, num_cols], use = "pairwise.complete.obs")
 cmat[is.na(cmat)] <- 0  # replace NAs
 high_corr <- findCorrelation(cmat, cutoff = 0.9)
 reduced_cmat <- cmat[-high_corr, -high_corr]
 corrplot(reduced_cmat, method = "color", 
-         type = "upper",       # upper triangle only
+         type = "full",       # upper triangle only
          tl.cex = 0.6,        # smaller text labels
          order = "hclust")
 

@@ -84,14 +84,14 @@ ncol(train_final)
 # target variable classes count
 ggplot(train_final, aes(x = factor(isFraud))) +
   geom_bar(fill = "lightblue4") +
-  labs(x = "isFraud", y = "Count", title = "Fraud vs Non-Fraud Transactions")
+  labs(x = "isFraud", y = "Count", title = "")
 
 
 # transaction Amount Distribution by Fraud Status
 ggplot(train_final, aes(x = TransactionAmt, fill = factor(isFraud))) +
   geom_histogram(bins = 50, position = "identity", alpha = 0.6) +
   scale_x_log10() +
-  labs(title = "Transaction Amount Distribution by Fraud Status",
+  labs(title = "",
        fill = "Fraud Status"   # legend label
        )
 
@@ -99,7 +99,7 @@ ggplot(train_final, aes(x = TransactionAmt, fill = factor(isFraud))) +
 ggplot(train_final, aes(x = TransactionAmt)) +
   geom_histogram(bins = 50) +
   scale_x_log10() +   # log scale if highly skewed
-  labs(title = "Transaction Amount Distribution")
+  labs(title = "")
 
 # ProductCD vs Fraud
 ggplot(train_final, aes(x = ProductCD, fill = factor(isFraud))) +

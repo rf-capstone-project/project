@@ -214,7 +214,7 @@ v_cols <- v_cols[v_cols != c("V107", "V305")]
 
 ```
 
-The missing numeroc values were filled with the column mean. While the categorical missing values were filled with a level called "unknown".
+The missing numeric values were filled with the column mean. While the categorical missing values were filled with the "unknown" label.
 
 ```{r}
 #| eval: false
@@ -240,62 +240,87 @@ train_final[] <- lapply(train_final, function(col) {
 <p>&nbsp;</p>
 
 
-Following data preprocessing, the distribution of the target variable between its two levels is shown below, with 92.15% non fraud vs 7.95% fraud cases.  
+Following data preprocessing, the distribution of the target variable between its two levels is shown below. As expected in fraud data, the classes are highly imbalanced, with 92.15% non fraud vs 7.95% fraud cases. 
 
 <p>&nbsp;</p>
 
 :::{.text-center}
-![Count of target variable per level.](images/fraudLevels.png){#fig-figure3}
+![Count of target variable per level.](images/notitle/fraudLevels.png){#fig-figure3}
 :::  
 
 <p>&nbsp;</p>
 
-Transacction amount distribution.
+The transaction amount distribution is roughly centered, with most transactions clustered around mid-range values and fewer occurring at the extremes. This suggests the dataset is not heavily skewed toward very small or very large amounts.
 
 :::{.text-center}
-![](images/transAmountDist.png){#fig}
+![Transaction amount distribution](images/notitle/transAmountDist.png){#fig-figure4}
 :::  
 
 <p>&nbsp;</p>
 
-Transacction amount distribution per fraud level.
+Transaction amounts are very similar across fraud and non-fraud: both have a median of \$50 and an interquartile range of \$25–\$100. About 98.8% of all transactions are under \$500. The fraud class has a slightly higher mean (\$88.8 vs $83.1), however, there is no major difference in the distribution.
 
 :::{.text-center}
-![](images/notitle/transAmountByFraud.png){#fig}
-:::  
-
-<p>&nbsp;</p>
-
-Continuing with the visualizations, this section explores additional aspects of the dataset through a series of graphical representations. These images highlight the relationship of the categorical features with the target variable.
-
-
-:::{.text-center}
-![Fraud by Card Type.](images/notitle/fraudByCardType.png){#fig-figure4}
-
-:::  
-
-<p>&nbsp;</p>
-
-:::{.text-center}
-![Fraud by Payment Network.](images/notitle/fraudByNetwork.png){#fig-figure5}
-
+![Transaction amount by fraud levels](images/notitle/transAmountByFraud.png){#fig-figure5}
 :::  
 
 <p>&nbsp;</p>
 
 
+Fraud rates differ by card type: credit cards show the highest fraud rate at 8.9% (6,693 of 75,090 transactions), followed by debit cards at 6.7% (4,613 of 68,950). Transactions labeled as “unknown” have a similar 6.7% rate, while charge cards show no fraud cases. This indicates that credit cards are more frequently used in fraudulent activity than debit or charge cards.
+
 :::{.text-center}
-![Fraud by Device Type.](images/notitle/fraudByDeviceType.png){#fig-figure6}
+![Fraud by Card Type.](images/notitle/fraudByCardType.png){#fig-figure6}
+
+:::  
+
+
+| Card Type       | Total Transactions | Fraud Cases | Fraud Rate |
+|------------------|--------------------|--------------|-------------|
+| Credit           | 75,090             | 6,693        | 8.9%        |
+| Debit            | 68,950             | 4,613        | 6.7%        |
+| Unknown          | 178                | 12           | 6.7%        |
+| Charge Card      | 15                 | 0            | 0.0%        |
+       
+       Table 2. Details of fraud rate by card type
+
+<p>&nbsp;</p>
+
+Fraud by Payment Network. Fraud appears unevenly distributed across networks. MasterCard shows the highest fraud rate at 8.9% (3,920 out of 44,186 transactions), followed by Discover at 7.8%. The Visa network, however, accounts for the largest total number of transactions, and therefore the highest absolute count of fraud cases.
+
+:::{.text-center}
+![Fraud by Payment Network.](images/notitle/fraudByNetwork.png){#fig-figure7}
+
+:::  
+
+
+<p>&nbsp;</p>
+
+Distribution of transactions by originating device type.
+
+:::{.text-center}
+![Fraud by Device Type.](images/notitle/fraudByDeviceType.png){#fig-figure8}
 
 :::  
 
 <p>&nbsp;</p>
 
+A few product types account for most fraud cases, pointing toward specific product segments with higher vulnerability.
+
 :::{.text-center}
-![Fraud by Product.](images/notitle/fraudByProduct.png){#fig-figure7}
+![Fraud by Product.](images/notitle/fraudByProduct.png){#fig-figure9}
 
 :::
 
+
+<p>&nbsp;</p>
+
+***Correlation Analysis.*** To explore the relationships among numeric variables, a correlation matrix was computed. This visualization helps identify pairs of features that move together, revealing potential multicollinearity or redundant predictors. Strong positive or negative correlations highlight variables that may carry overlapping information, which can inform feature selection and model simplification.
+
+:::{.text-center}
+![Correlation Matrix.](images/corrmatrix.png){#fig-figure10}
+
+:::
 
 
 

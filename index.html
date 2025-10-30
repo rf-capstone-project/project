@@ -8,7 +8,7 @@
 
 <meta name="dcterms.date" content="2025-10-25">
 
-<title>Exploring Fraud Detection: An Analysis of the Random Forest Algorithm in Credit Card Transactions</title>
+<title>Exploring Fraud Detection. An Analysis of the Random Forest Algorithm in Credit Card Transactions</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -2339,7 +2339,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Exploring Fraud Detection: An Analysis of the Random Forest Algorithm in Credit Card Transactions</h1>
+<h1 class="title">Exploring Fraud Detection. An Analysis of the Random Forest Algorithm in Credit Card Transactions</h1>
 </div>
 
 
@@ -2368,8 +2368,10 @@ window.Quarto = {
 </header>
 
 
-<p><a href="https://rf-capstone-project.github.io/project/">Website</a></p>
-<p><a href="https://rf-capstone-project.github.io/project/slides.html">Slides</a></p>
+<!--[Slides](https://rf-capstone-project.github.io/project/slides.html) -->
+<p align="right">
+<a href="https://rf-capstone-project.github.io/project/slides.html" style="color: black;">Slides</a>
+</p>
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
 <p>Modern data problems often involve large and noisy datasets where simple predictive models fail to capture complex patterns. Random Forests address these challenges by combining the strengths of many decision trees into one powerful ensemble, providing a scalable approach across a wide range of domains, and is commonly used for classification and regression tasks. First developed in the late 1990s and popularized in the early 2000s, Random Forests (RF) improve predictive performance by aggregating the outputs of multiple decision trees built from randomly sampled subsets of data. In general, the popularity of tree-based methods in machine learning has increased exponentially, due to their capacity to produce reliable and readable results, while being flexible on the type of data they can handle <span class="citation" data-cites="Louppe2015">(<a href="#ref-Louppe2015" role="doc-biblioref">Louppe, 2015</a>)</span>. Random Forest’s acceptance is also supported by the fact that it allows clearly defined criteria to be analyzed and does not behave as a black box. This is ideal for domains that often deal with regulatory scrutiny or have a need to develop deeper insights into their classification process. The success of RFs is also explained based on the following factors <span class="citation" data-cites="Louppe2015">(<a href="#ref-Louppe2015" role="doc-biblioref">Louppe, 2015</a>)</span>:</p>
@@ -2394,7 +2396,7 @@ window.Quarto = {
 <ul>
 <li>Training:
 <ul>
-<li>Each tree is built on a bootstrap sample of the data. At each node, instead of using all predictors, a random subset is chosen, and the best split among them is selected (Figure 1).</li>
+<li>Each tree is built on a bootstrap sample of the data. At each node, instead of using all predictors, a random subset is chosen, and the best split among them is selected (<a href="#fig-figure1" class="quarto-xref">Figure 1</a>)</li>
 </ul></li>
 <li>Prediction:
 <ul>
@@ -2430,7 +2432,7 @@ Figure 1: A Binary classification tree. (adapted from Louppe, 2015, inspired by
 <li><p>Applying Weights: Higher weights are assigned to the minority class and incorporated into the Gini index, affecting both the choice of splits and the weighting of terminal nodes in each tree <span class="citation" data-cites="Valavi2021">(<a href="#ref-Valavi2021" role="doc-biblioref">Roozbeh et al., 2021</a>)</span>.</p></li>
 <li><p>Equal Sampling: Involves creating multiple datasets (from the original data). Separate Random Forest models are trained on each dataset, and the final prediction is obtained by averaging the predictions of all models <span class="citation" data-cites="Valavi2021">(<a href="#ref-Valavi2021" role="doc-biblioref">Roozbeh et al., 2021</a>)</span>.</p></li>
 <li><p>Down Sampling: Each tree uses all minority-class samples and a randomly selected subset of majority-class samples equal in size to the minority. Because different trees may use different subsets, the method effectively incorporates many majority samples across the forest <span class="citation" data-cites="Valavi2021">(<a href="#ref-Valavi2021" role="doc-biblioref">Roozbeh et al., 2021</a>)</span>.</p></li>
-<li><p>Synthetic Minority Over-Sampling Technique (SMOTE) (Figure 2). The process begins by selecting a sample from the minority class. After that, it measures the feature wise difference between this sample and one of its nearest neighbors. Finally, this difference is scaled by a random value ranging from 0 to 1<span class="citation" data-cites="Zhang2024">(<a href="#ref-Zhang2024" role="doc-biblioref">Zhang, 2024</a>)</span>.</p></li>
+<li><p>Synthetic Minority Over-Sampling Technique (SMOTE) (<a href="#fig-figure2" class="quarto-xref">Figure 2</a>). The process begins by selecting a sample from the minority class. After that, it measures the feature wise difference between this sample and one of its nearest neighbors. Finally, this difference is scaled by a random value ranging from 0 to 1<span class="citation" data-cites="Zhang2024">(<a href="#ref-Zhang2024" role="doc-biblioref">Zhang, 2024</a>)</span>.</p></li>
 </ul>
 <div class="text-center">
 <div id="fig-figure2" class="quarto-float quarto-figure quarto-figure-center anchored">

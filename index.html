@@ -2424,7 +2424,7 @@ Figure 1: A Binary classification tree. (adapted from Louppe, 2015, inspired by
 <p><strong><em>Splitting Criteria</em></strong></p>
 <p>Classification Impurity function based on the Shannon Entropy (Shannon and Weaver, 1949, as cited in <span class="citation" data-cites="Louppe2015">(<a href="#ref-Louppe2015" role="doc-biblioref">Louppe, 2015</a>)</span>):</p>
 <p><span class="math display">\[  i_H(t)=-\sum_{k=1}^{J}p(c_k|t)log_2(p(c_k|t))  \]</span> Impurity function based on the Gini index (Gini, 1912, as cited in <span class="citation" data-cites="Louppe2015">(<a href="#ref-Louppe2015" role="doc-biblioref">Louppe, 2015</a>)</span>:</p>
-<p><span class="math display">\[  i+G(t)=-\sum_{k=1}^{J}p(c_k|t)(1-p(c_k|t))  \]</span></p>
+<p><span class="math display">\[  i_G(t)=-\sum_{k=1}^{J}p(c_k|t)(1-p(c_k|t))  \]</span></p>
 <p><strong><em>Approaches to class imbalance</em></strong></p>
 <ul>
 <li><p>Applying Weights: Higher weights are assigned to the minority class and incorporated into the Gini index, affecting both the choice of splits and the weighting of terminal nodes in each tree <span class="citation" data-cites="Valavi2021">(<a href="#ref-Valavi2021" role="doc-biblioref">Roozbeh et al., 2021</a>)</span>.</p></li>

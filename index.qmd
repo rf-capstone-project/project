@@ -29,7 +29,6 @@ Modern data problems often involve large and noisy datasets where simple predict
 - Capacity for handling different types of data.
 - Decision trees perform feature selection, making them resilient to irrelevant or noisy variables.
 - Robustness to outliers or errors in the label variable.
-- Ease of interpretability.
 
 Random Forests are adept at modeling complex, non-linear relationships within data, making them effective for tasks where interactions between features are not easily captured by linear models [@Breiman2001]. This capability stems from their ensemble approach, where multiple decision trees are trained on random subsets of the data. Additionally, RFs provide a mechanism for assessing feature importance through permutation methods, by evaluating the increase in prediction error when the values of a particular feature are randomly shuffled. This allows RFs to identify which variables have a greater impact on the model's predictions [@Genuer2010]. However, it is essential to note that these importance measures can be biased, especially when features are correlated or when there are many irrelevant variables [@Li2019].  Another feature of RFs is the use of out-of-bag (OOB) samples (data points not included in the training of a particular tree) to estimate the model's generalization error. This OOB error estimate provides an internal validation mechanism, reducing the need for a separate validation dataset,  and offering a more efficient means of assessing model performance [@Breiman2001];[@Angrist1996].
 
@@ -80,6 +79,14 @@ $$
 
 In the tree building process an impurity measure $i(t)$ evaluates the quality of a node $t$, with smaller values indicating purer nodes and therefore better predictions $\hat{f}_t(x)$
 
+***Hyperparameter Tuning***  
+
+Hyperparameter tuning helps Random Forests create a balance between model complexity, computational efficiency, and generalization performance. One of the most influential parameters is the number of trees in the ensemble (*n_estimators*). Increasing this value usually reduces variance and improves overall stability, although the gains eventually level out while computational cost continues to rise. The maximum depth of each tree (*max_depth*) also plays an important role. Deeper trees can capture complex patterns in the data, but they may overfit when allowed to grow without constraint.
+Another key parameter is the number of features considered at each split (*max_features*). Limiting this value prevents a small group of strong predictors from dominating every decision and helps reduce correlation across the forest. Also, parameters such as *min_samples_split* and *min_samples_leaf* prevent the model from creating branches based on very small sample sizes, making the model less sensitive to noise.  
+
+The bootstrap setting (*bootstrap=True*) determines whether sampling occurs with replacement when generating training subsets for each tree. While this behavior is standard, not using bootstrapping can be useful in smaller datasets where more unique samples may be wanted. In practice, methods such as grid search and randomized search are commonly used to evaluate combinations of these hyperparameters, improving model accuracy and robustness in a systematic way [@GeeksforGeeks2024].
+
+
 
 ***Splitting Criteria***
 
@@ -106,15 +113,13 @@ $$  i_G(t)=-\sum_{k=1}^{J}p(c_k|t)(1-p(c_k|t))  $$
 ![Illustration of the Synthetic Minority Oversampling Technique.](images/smote1.png){#fig-figure2}
 :::
 
-Expanding on the SMOTE methodology, there have also been successful applications of integrating Global Adversarial Networks (GAN) to improve data sample quality. This integrated method continuously tests the synthetic data generated during the SMOTE process to determine if it can fool the GAN model a certain percentage of the time. In experimentation, once the sampling was able to fool the GAN model over 50% of the time, the RF trained with this data returned the highest performance compared to traditional methods of oversampling, such as just using SMOTE [@Ghaleb2023].
-
-One last oversampling technique that has been shown to improve the model performance is the Iterative Nearest Neighborhood Oversampling (INNO) method. This method iteratively uses a small set of data samples and finds the distance between the samples to determine the density of the feature space and establishes a similarity score that is then used to apply to all the samples. This means that when there is more sample data in a certain feature space, there is a higher chance that the sample with the highest similarity score will be built upon and then this process repeats until the dataset meets a specific balance target. Although this was amongst multi-class targets, the results from this method showed that classification performance improved as the class imbalance ratio rose from 0.1 to 0.4 using INNO sampling [@Yu2015].
+Expanding on the SMOTE methodology, there have also been successful applications of integrating Global Adversarial Networks (GAN) to improve data sample quality. In experimentation, once a sampling was able to fool a GAN model over 50% of the time, the RF trained with this data returned the highest performance compared to traditional methods of oversampling [@Ghaleb2023]. Another oversampling technique that has been shown to improve the model performance is the Iterative Nearest Neighborhood Oversampling (INNO) method. This method iteratively uses a small set of data samples and finds the distance between the samples to determine the density of the feature space and establishes a similarity score that is then used to apply to all the samples. In experimentation, this method showed that classification performance improved as the class imbalance ratio rose from 0.1 to 0.4 using INNO sampling [@Yu2015].
 
 
 Beyond sampling strategies, Random Forests use internal validation methods such as Out-of-Bag (OOB) error estimation. During training, each bootstrap sample leaves out about a third of the observations, which can then be used to evaluate model performance without needing a separate validation set. This approach provides an unbiased measure of error and helps to refine parameters such as tree depth and the number of features considered at each split.
 
 
-In addition to dataset balancing techniques, pruning techniques are also needed to eliminate noise and to improve performance by handling possible bias and variance from the sampling process. In [Zhou2021], it’s found that in low signal to noise domains, by reducing the depth of trees, the shallowness of trees is able to create noticeable gains in accuracy whereas with medium and high signal to noise ratios, there were no noticeable gains in model accuracy. This pruning technique not only demonstrated improved performance but also reduced the cost for training the model which has applications in resource constrained environments.
+In addition to dataset balancing techniques, pruning techniques are also needed to eliminate noise and to improve performance by handling possible bias and variance from the sampling process. In [@Zhou2021], it’s found that in low signal to noise domains, by reducing the depth of trees, the shallowness of trees is able to create noticeable gains in accuracy whereas with medium and high signal to noise ratios, there were no noticeable gains in model accuracy. This pruning technique not only demonstrated improved performance but also reduced the cost for training the model which has applications in resource constrained environments.
 
 
 
@@ -322,8 +327,21 @@ A few product types account for most fraud cases, pointing toward specific produ
 
 :::
 
+***Model Fitting***  
 
+Initially we run a basic model with default parameters. In this stage of the project we used the *randomForest* and *rsample* R packages. The data was split into training and testing sets with an 80-20 ratio.  
 
+```{r}
+#| eval: false
+#| echo: true
+
+#train/test split 80-20
+set.seed(1)
+split <- initial_split(df, prop = 0.8)
+train_df <- training(split)
+test_df  <- testing(split)
+
+```
 
 
 

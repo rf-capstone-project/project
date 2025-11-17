@@ -1,5 +1,5 @@
 ---
-title: "Exploring Fraud Detection. An Analysis of the Random Forest Algorithm in Credit Card Transactions"
+title: "Exploring Fraud Detection - An Analysis of the Random Forest Algorithm in Credit Card Transactions"
 authors: Jessica Cramer, Hunter Hillis, Murpys D. Mendez
 date: 2025-10-25
 format:
@@ -81,10 +81,12 @@ In the tree building process an impurity measure $i(t)$ evaluates the quality of
 
 ***Hyperparameter Tuning***  
 
-Hyperparameter tuning helps Random Forests create a balance between model complexity, computational efficiency, and generalization performance. One of the most influential parameters is the number of trees in the ensemble (*n_estimators*). Increasing this value usually reduces variance and improves overall stability, although the gains eventually level out while computational cost continues to rise. The maximum depth of each tree (*max_depth*) also plays an important role. Deeper trees can capture complex patterns in the data, but they may overfit when allowed to grow without constraint.
-Another key parameter is the number of features considered at each split (*max_features*). Limiting this value prevents a small group of strong predictors from dominating every decision and helps reduce correlation across the forest. Also, parameters such as *min_samples_split* and *min_samples_leaf* prevent the model from creating branches based on very small sample sizes, making the model less sensitive to noise.  
+Hyperparameter tuning helps Random Forests create a balance between model complexity, computational efficiency, and generalization performance. One of the most influential parameters is the number of trees in the ensemble (*ntree*). Increasing this value usually reduces variance and improves overall stability, although the gains eventually level out while computational cost continues to rise. The maximum depth of each tree (*maxnodes*) also plays an important role. Deeper trees can capture complex patterns in the data, but they may overfit when allowed to grow without constraint.  
 
-The bootstrap setting (*bootstrap=True*) determines whether sampling occurs with replacement when generating training subsets for each tree. While this behavior is standard, not using bootstrapping can be useful in smaller datasets where more unique samples may be wanted. In practice, methods such as grid search and randomized search are commonly used to evaluate combinations of these hyperparameters, improving model accuracy and robustness in a systematic way [@GeeksforGeeks2024].
+Another key parameter is the number of features considered at each split (*mtry*). Limiting this value prevents a small group of strong predictors from dominating every decision and helps reduce correlation across the forest. Also, parameters such as *nodesize* prevent the model from creating branches based on very small sample sizes, making the model less sensitive to noise.  
+
+The bootstrap setting determines whether sampling occurs with replacement when generating training subsets for each tree. While this behavior is standard, not using bootstrapping can be useful in smaller datasets where more unique samples may be wanted. In practice, methods such as grid search and randomized search are commonly used to evaluate combinations of these hyperparameters, improving model accuracy and robustness in a systematic way [@Probst2019].
+
 
 
 
@@ -325,27 +327,146 @@ A few product types account for most fraud cases, pointing toward specific produ
 :::{.text-center}
 ![Correlation Matrix.](images/corrmatrix.png){#fig-figure10}
 
-:::
+:::  
+
+<p>&nbsp;</p>
+
+***Data Preparation***  
+
+Before creating a fraud detection Random Forest model, we first need to conduct a few final adjustments so the data works well with the model; this includes converting the transaction timestamp (*TransactionDT*), originally stored as an offset in seconds, into a proper date. We also converted key categorical fields such as card type, device type, and the target variable isFraud into factors. Some variables with extremely high cardinality are intentionally excluded from factor conversion to avoid overwhelming the Random Forest model while others have their factor names sanitized with prefixes to prevent issues during model training.
+
+
+
+
 
 ***Model Fitting***  
 
-Initially we run a basic model with default parameters. In this stage of the project we used the *randomForest* and *rsample* R packages. The data was split into training and testing sets with an 80-20 ratio.  
+The dataset is split into an 80/20 train-test partition to allow for unbiased evaluation. Because fraud datasets are highly imbalanced, two additional training sets are created using SMOTE oversampling: one where the minority fraud class is increased to half the size of the majority class, and another where the minority and majority classes are fully balanced. This was done to compare the impact of the bias in the dataset and the impact that certain features would have to the final model’s performance [@Ghaleb2023]. These transformations are implemented using the *recipes* and *themis* packages, which allow certain high-cardinality fields to be marked as identifiers so they are excluded from SMOTE processing.    
 
 ```{r}
 #| eval: false
 #| echo: true
 
-#train/test split 80-20
-set.seed(1)
-split <- initial_split(df, prop = 0.8)
-train_df <- training(split)
-test_df  <- testing(split)
+plot_value_ratio <- function(df1, df2, df3, feature, value_A, value_B,
+                             df_names = c("Base", "Upsampled 50%", "Upsampled 100%"))
+  
+  # Function to compute ratio of two values
+  compute_ratio <- function(df, feature, value_A, value_B) {
+    df %>%
+      summarize(
+        count_A = sum(.data[[feature]] == value_A, na.rm = TRUE),
+        count_B = sum(.data[[feature]] == value_B, na.rm = TRUE)
+      ) %>%
+      mutate(ratio = count_A / count_B) %>%
+      pull(ratio)
+  }
+  
+  # Create dataframe of ratios
+  ratios <- data.frame(
+    dataset = df_names,
+    ratio = c(
+      compute_ratio(df1, feature, value_A, value_B),
+      compute_ratio(df2, feature, value_A, value_B),
+      compute_ratio(df3, feature, value_A, value_B)
+    )
+  )
+  
+  ratios$dataset <- factor(ratios$dataset, levels = c("Base", "Upsampled 50%", "Upsampled 100%"))
 
-```
+
+```  
+
+The resulting datasets (original, 50% oversampled, and 100% oversampled) serve as the basis for three different Random Forest models (@fig-figure11).  
+
+<p>&nbsp;</p>
+
+:::{.text-center}
+![Oversampling ratio.](images/oversamplingRatio.png){#fig-figure11}
+
+:::  
+
+<p>&nbsp;</p>
+
+During training of the final models, we define a custom grid search function that evaluates different combinations of hyperparameters such as the number of trees, variables tried at each split, and whether to compute variable importance. For each configuration, the function trains a Random Forest, measures accuracy and false positive rate on an internal validation split, and identifies the best set of parameters based on those metrics.  
 
 
+```{r}
+#| eval: false
+#| echo: true
 
-## Conclusions
+# Define hyperparameter grid
+param_grid <- expand.grid(
+  ntree = ntree_values,
+  mtry = mtry_values,
+  importance = importance_values
+)
+results <- data.frame()
+# Grid search: train and evaluate a model for each combination
+for (i in 1:nrow(param_grid)) {
+  params <- param_grid[i, ]
+  model <- randomForest(
+    as.formula(paste(target, "~ .")),
+    data = train,
+    ntree = params$ntree,
+    mtry = params$mtry,
+    importance = params$importance
+  )
+  preds <- predict(model, newdata = test)
+  cm <- confusionMatrix(preds, test[[target]])
+
+  acc <- cm$overall["Accuracy"]
+  tn <- cm$table[1,1]
+  fp <- cm$table[1,2]
+  fpr <- fp / (fp + tn)
+
+  results <- rbind(results, data.frame(
+    ntree = params$ntree,
+    mtry = params$mtry,
+    importance = params$importance,
+    Accuracy = acc,
+    False_Positive_Rate = fpr
+  ))
+}
+
+```  
+Using the optimized settings, three Random Forest models are trained: one on the original data, one on the 50% oversampled data, and one on the fully balanced data. These tests allowed us to identify that the best performing models were the ones with fewer trees and fewer features considered at each split, rather than those with larger values for these parameters. 
+
+The ROC curve  gives us a clear picture of how well our models separate fraudulent transactions from legitimate ones (@fig-figure12). As shown in the graph, the three versions of the data performed relatively well. Their curves all rise quickly toward the top-left corner, which means they achieve high true positive rates even when the false positive rate is low.  
+
+<p>&nbsp;</p>
+
+:::{.text-center}
+![ROC Curve Comparison Acrosss Models.](images/ROC.png){#fig-figure12}
+
+:::  
+
+<p>&nbsp;</p>
+
+Even though the curves all look similar, the oversampled models perform better. Balancing the data through SMOTE gives the model more examples of fraud to learn from, which leads to small but noticeable improvements in detecting fraud early on the curve. Overall, the shape of all three ROC curves suggests very high AUC values, which indicates excellent ability to rank transactions by fraud risk. This trend is consistent with findings in previous research showing that adding synthetic minority samples can help models perform better on imbalanced data.  
+
+We also examined the confusion matrix to understand how the model performed on the test data (@fig-figure13). The model correctly identified 26,393 legitimate transactions and 1,549 fraudulent ones, which shows that it learns the general pattern of the data well. However, it also produced 189 false positives and 716 false negatives.  
+
+This imbalance between true positives and false negatives shows how challenging it can be to work with a dataset where fraud cases are extremely rare. While the Random Forest performs well overall, the confusion matrix makes it clear that there’s still room for improvement. Adjusting the classification threshold, experimenting with additional resampling techniques, or using cost-sensitive methods could help the model detect more fraudulent transactions and reduce the number of missed cases.
+
+<p>&nbsp;</p>
+
+:::{.text-center}
+![Confusion Matrix.](images/confMatrix.png){#fig-figure13}
+:::  
+
+<p>&nbsp;</p>
+
+
+## Conclusions  
+
+
+Random Forest is a versatile and reliable machine learning algorithm widely used for both classification and regression tasks. Its ability to handle large feature sets, capture nonlinear relationships, and reduce overfitting through ensemble averaging makes it a strong choice for many complex predictive modeling problems. Because it is robust to noise, missing data, and outliers, Random Forest often performs well even when working with imperfect or unbalanced datasets.  
+
+In our project, we applied Random Forest to the task of credit card fraud detection and examined how data preprocessing, feature engineering, and sampling strategies affected model performance. After preparing and cleaning the dataset, we explored different oversampling approaches to address the severe class imbalance and evaluated how these changes influenced the model’s ability to detect fraud. Through this process, we found that Random Forest consistently performed well across multiple versions of the dataset, including the baseline and oversampled models.  
+
+Our analysis showed that balancing the data helped the model better identify fraud cases, and the tuning experiments provided insight into how parameters such as the number of trees and the *mtry* value influence predictive accuracy. These steps allowed us to build a model that performs effectively while also highlighting areas where further improvements could be made. Overall, this project demonstrates the strength of Random Forest as a modeling approach and reinforces the importance of thoughtful preprocessing and evaluation when dealing with highly imbalanced real-world datasets.
+
+
 
 ## References
 

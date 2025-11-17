@@ -2368,10 +2368,7 @@ window.Quarto = {
 </header>
 
 
-<!--[Slides](https://rf-capstone-project.github.io/project/slides.html) -->
-<p align="right">
-<a href="https://rf-capstone-project.github.io/project/slides.html" style="color: black;">Slides</a>
-</p>
+<p><a href="https://rf-capstone-project.github.io/project/slides.html">Slides</a></p>
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
 <p>Modern data problems often involve large and noisy datasets where simple predictive models fail to capture complex patterns. Random Forests address these challenges by combining the strengths of many decision trees into one powerful ensemble, providing a scalable approach across a wide range of domains, and is commonly used for classification and regression tasks. First developed in the late 1990s and popularized in the early 2000s, Random Forests (RF) improve predictive performance by aggregating the outputs of multiple decision trees built from randomly sampled subsets of data. In general, the popularity of tree-based methods in machine learning has increased exponentially, due to their capacity to produce reliable and readable results, while being flexible on the type of data they can handle <span class="citation" data-cites="Louppe2015">(<a href="#ref-Louppe2015" role="doc-biblioref">Louppe, 2015</a>)</span>. Random Forest’s acceptance is also supported by the fact that it allows clearly defined criteria to be analyzed and does not behave as a black box. This is ideal for domains that often deal with regulatory scrutiny or have a need to develop deeper insights into their classification process. The success of RFs is also explained based on the following factors <span class="citation" data-cites="Louppe2015">(<a href="#ref-Louppe2015" role="doc-biblioref">Louppe, 2015</a>)</span>:</p>
@@ -2721,7 +2718,7 @@ Figure 6: Fraud by Card Type.
 </tr>
 </tbody>
 </table>
-<pre><code>   Table 2. Details of fraud rate by card type</code></pre>
+<pre><code>    Table 2. Details of fraud rate by card type</code></pre>
 <p>
  
 </p>
@@ -2881,7 +2878,7 @@ Figure 11: Oversampling ratio.
 <span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>Using the optimized settings, three Random Forest models are trained: one on the original data, one on the 50% oversampled data, and one on the fully balanced data. These tests allowed us to identify that the best performing models were the ones with fewer trees and fewer features considered at each split, rather than those with larger values for these parameters.</p>
+<p>Using the optimized settings (<em>mtree=50</em>, <em>ntry=5</em>), three Random Forest models are trained: one on the original data, one on the 50% oversampled data, and one on the fully balanced data. These tests allowed us to identify that the best performing models were the ones with fewer trees and fewer features considered at each split, rather than those with larger values for these parameters.</p>
 <p>The ROC curve gives us a clear picture of how well our models separate fraudulent transactions from legitimate ones (<a href="#fig-figure12" class="quarto-xref">Figure 12</a>). As shown in the graph, the three versions of the data performed relatively well. Their curves all rise quickly toward the top-left corner, which means they achieve high true positive rates even when the false positive rate is low.</p>
 <p>
  
@@ -2902,8 +2899,175 @@ Figure 12: ROC Curve Comparison Acrosss Models.
  
 </p>
 <p>Even though the curves all look similar, the oversampled models perform better. Balancing the data through SMOTE gives the model more examples of fraud to learn from, which leads to small but noticeable improvements in detecting fraud early on the curve. Overall, the shape of all three ROC curves suggests very high AUC values, which indicates excellent ability to rank transactions by fraud risk. This trend is consistent with findings in previous research showing that adding synthetic minority samples can help models perform better on imbalanced data.</p>
+<p>Table 3 presents the top features ranked by their importance in the Random Forest model, measured using the MeanDecreaseGini criterion. These variables contributed the most to the model’s ability to distinguish between fraudulent and legitimate transactions, providing insight into which aspects of the data the model relied on most during prediction.</p>
+<p>
+ 
+</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 29%">
+<col style="width: 21%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Feature</th>
+<th>X0</th>
+<th>X1</th>
+<th>MeanDecreaseAccuracy</th>
+<th>MeanDecreaseGini</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>C1</td>
+<td>8.729512</td>
+<td>21.144007</td>
+<td>19.033931</td>
+<td>8523.120</td>
+</tr>
+<tr class="even">
+<td>PC3</td>
+<td>6.789584</td>
+<td>16.075576</td>
+<td>15.556632</td>
+<td>6033.349</td>
+</tr>
+<tr class="odd">
+<td>C13</td>
+<td>16.672112</td>
+<td>17.732353</td>
+<td>18.100839</td>
+<td>5762.509</td>
+</tr>
+<tr class="even">
+<td>C14</td>
+<td>15.510688</td>
+<td>13.755838</td>
+<td>14.252198</td>
+<td>5380.905</td>
+</tr>
+<tr class="odd">
+<td>PC2</td>
+<td>8.425228</td>
+<td>11.692212</td>
+<td>11.797115</td>
+<td>4813.375</td>
+</tr>
+<tr class="even">
+<td>TransactionID</td>
+<td>15.785669</td>
+<td>30.761484</td>
+<td>31.489951</td>
+<td>4299.609</td>
+</tr>
+<tr class="odd">
+<td>TransactionDT</td>
+<td>11.229870</td>
+<td>18.347528</td>
+<td>19.021460</td>
+<td>4103.147</td>
+</tr>
+<tr class="even">
+<td>PC4</td>
+<td>10.610300</td>
+<td>15.020564</td>
+<td>15.174763</td>
+<td>3574.724</td>
+</tr>
+<tr class="odd">
+<td>PC9</td>
+<td>8.016019</td>
+<td>16.159586</td>
+<td>16.370353</td>
+<td>3311.446</td>
+</tr>
+<tr class="even">
+<td>TransactionAmt</td>
+<td>19.619012</td>
+<td>42.477480</td>
+<td>41.953280</td>
+<td>3171.593</td>
+</tr>
+<tr class="odd">
+<td>C2</td>
+<td>5.512165</td>
+<td>12.679897</td>
+<td>13.498572</td>
+<td>2883.304</td>
+</tr>
+<tr class="even">
+<td>id_02</td>
+<td>23.489764</td>
+<td>37.741852</td>
+<td>38.379382</td>
+<td>2748.055</td>
+</tr>
+<tr class="odd">
+<td>C11</td>
+<td>8.000552</td>
+<td>12.349480</td>
+<td>12.362402</td>
+<td>2692.221</td>
+</tr>
+<tr class="even">
+<td>card1</td>
+<td>11.069711</td>
+<td>30.014099</td>
+<td>29.387611</td>
+<td>2678.225</td>
+</tr>
+<tr class="odd">
+<td>PC1</td>
+<td>7.466844</td>
+<td>12.282018</td>
+<td>12.781813</td>
+<td>2427.450</td>
+</tr>
+</tbody>
+</table>
+<pre><code>Table 3. Feature importance table by MeanDecreaseGini</code></pre>
+<p>
+ 
+</p>
 <p>We also examined the confusion matrix to understand how the model performed on the test data (<a href="#fig-figure13" class="quarto-xref">Figure 13</a>). The model correctly identified 26,393 legitimate transactions and 1,549 fraudulent ones, which shows that it learns the general pattern of the data well. However, it also produced 189 false positives and 716 false negatives.</p>
 <p>This imbalance between true positives and false negatives shows how challenging it can be to work with a dataset where fraud cases are extremely rare. While the Random Forest performs well overall, the confusion matrix makes it clear that there’s still room for improvement. Adjusting the classification threshold, experimenting with additional resampling techniques, or using cost-sensitive methods could help the model detect more fraudulent transactions and reduce the number of missed cases.</p>
+<p>
+ 
+</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Metric</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Accuracy</td>
+<td>0.9690</td>
+</tr>
+<tr class="even">
+<td>Precision</td>
+<td>0.9735</td>
+</tr>
+<tr class="odd">
+<td>Recall</td>
+<td>0.9934</td>
+</tr>
+<tr class="even">
+<td>Specificity</td>
+<td>0.6830</td>
+</tr>
+<tr class="odd">
+<td>F1 Score</td>
+<td>0.9834</td>
+</tr>
+</tbody>
+</table>
+<pre><code>Table 4. Performance metrics</code></pre>
 <p>
  
 </p>

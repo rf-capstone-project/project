@@ -17,10 +17,8 @@ execute:
   message: false
 ---
 
-<!--[Slides](https://rf-capstone-project.github.io/project/slides.html) -->
-<p align="right">
-<a href="https://rf-capstone-project.github.io/project/slides.html" style="color: black;">Slides</a>
-</p>
+[Slides](https://rf-capstone-project.github.io/project/slides.html)
+
 ## Introduction
 
 Modern data problems often involve large and noisy datasets where simple predictive models fail to capture complex patterns. Random Forests address these challenges by combining the strengths of many decision trees into one powerful ensemble, providing a scalable approach across a wide range of domains, and is commonly used for classification and regression tasks. First developed in the late 1990s and popularized in the early 2000s, Random Forests (RF) improve predictive performance by aggregating the outputs of multiple decision trees built from randomly sampled subsets of data. In general, the popularity of tree-based methods in machine learning has increased exponentially, due to their capacity to produce reliable and readable results, while being flexible on the type of data they can handle [@Louppe2015]. Random Forest’s acceptance is also supported by the fact that it allows clearly defined criteria to be analyzed and does not behave as a black box. This is ideal for domains that often deal with regulatory scrutiny or have a need to develop deeper insights into their classification process. The success of RFs is also explained based on the following factors [@Louppe2015]:
@@ -289,7 +287,7 @@ Fraud rates differ by card type: credit cards show the highest fraud rate at 8.9
 | Unknown          | 178                | 12           | 6.7%        |
 | Charge Card      | 15                 | 0            | 0.0%        |
        
-       Table 2. Details of fraud rate by card type
+        Table 2. Details of fraud rate by card type
 
 <p>&nbsp;</p>
 
@@ -429,7 +427,7 @@ for (i in 1:nrow(param_grid)) {
 }
 
 ```  
-Using the optimized settings, three Random Forest models are trained: one on the original data, one on the 50% oversampled data, and one on the fully balanced data. These tests allowed us to identify that the best performing models were the ones with fewer trees and fewer features considered at each split, rather than those with larger values for these parameters. 
+Using the optimized settings (*mtree=50*, *ntry=5*), three Random Forest models are trained: one on the original data, one on the 50% oversampled data, and one on the fully balanced data. These tests allowed us to identify that the best performing models were the ones with fewer trees and fewer features considered at each split, rather than those with larger values for these parameters. 
 
 The ROC curve  gives us a clear picture of how well our models separate fraudulent transactions from legitimate ones (@fig-figure12). As shown in the graph, the three versions of the data performed relatively well. Their curves all rise quickly toward the top-left corner, which means they achieve high true positive rates even when the false positive rate is low.  
 
@@ -444,9 +442,50 @@ The ROC curve  gives us a clear picture of how well our models separate fraudule
 
 Even though the curves all look similar, the oversampled models perform better. Balancing the data through SMOTE gives the model more examples of fraud to learn from, which leads to small but noticeable improvements in detecting fraud early on the curve. Overall, the shape of all three ROC curves suggests very high AUC values, which indicates excellent ability to rank transactions by fraud risk. This trend is consistent with findings in previous research showing that adding synthetic minority samples can help models perform better on imbalanced data.  
 
+Table 3 presents the top features ranked by their importance in the Random Forest model, measured using the MeanDecreaseGini criterion. These variables contributed the most to the model’s ability to distinguish between fraudulent and legitimate transactions, providing insight into which aspects of the data the model relied on most during prediction.  
+
+<p>&nbsp;</p>
+
+
+| Feature        |      X0    |      X1    | MeanDecreaseAccuracy | MeanDecreaseGini |
+|----------------|------------|------------|------------------------|------------------|
+| C1             |  8.729512  | 21.144007  | 19.033931              | 8523.120         |
+| PC3            |  6.789584  | 16.075576  | 15.556632              | 6033.349         |
+| C13            | 16.672112  | 17.732353  | 18.100839              | 5762.509         |
+| C14            | 15.510688  | 13.755838  | 14.252198              | 5380.905         |
+| PC2            |  8.425228  | 11.692212  | 11.797115              | 4813.375         |
+| TransactionID  | 15.785669  | 30.761484  | 31.489951              | 4299.609         |
+| TransactionDT  | 11.229870  | 18.347528  | 19.021460              | 4103.147         |
+| PC4            | 10.610300  | 15.020564  | 15.174763              | 3574.724         |
+| PC9            |  8.016019  | 16.159586  | 16.370353              | 3311.446         |
+| TransactionAmt | 19.619012  | 42.477480  | 41.953280              | 3171.593         |
+| C2             |  5.512165  | 12.679897  | 13.498572              | 2883.304         |
+| id_02          | 23.489764  | 37.741852  | 38.379382              | 2748.055         |
+| C11            |  8.000552  | 12.349480  | 12.362402              | 2692.221         |
+| card1          | 11.069711  | 30.014099  | 29.387611              | 2678.225         |
+| PC1            |  7.466844  | 12.282018  | 12.781813              | 2427.450         |
+
+    Table 3. Feature importance table by MeanDecreaseGini
+
+<p>&nbsp;</p>
+
 We also examined the confusion matrix to understand how the model performed on the test data (@fig-figure13). The model correctly identified 26,393 legitimate transactions and 1,549 fraudulent ones, which shows that it learns the general pattern of the data well. However, it also produced 189 false positives and 716 false negatives.  
 
-This imbalance between true positives and false negatives shows how challenging it can be to work with a dataset where fraud cases are extremely rare. While the Random Forest performs well overall, the confusion matrix makes it clear that there’s still room for improvement. Adjusting the classification threshold, experimenting with additional resampling techniques, or using cost-sensitive methods could help the model detect more fraudulent transactions and reduce the number of missed cases.
+This imbalance between true positives and false negatives shows how challenging it can be to work with a dataset where fraud cases are extremely rare. While the Random Forest performs well overall, the confusion matrix makes it clear that there’s still room for improvement. Adjusting the classification threshold, experimenting with additional resampling techniques, or using cost-sensitive methods could help the model detect more fraudulent transactions and reduce the number of missed cases.  
+
+<p>&nbsp;</p>
+
+
+| Metric       | Value      |
+|--------------|------------|
+| Accuracy     | 0.9690     |
+| Precision    | 0.9735     |
+| Recall       | 0.9934     |
+| Specificity  | 0.6830     |
+| F1 Score     | 0.9834     |
+
+
+    Table 4. Performance metrics
 
 <p>&nbsp;</p>
 

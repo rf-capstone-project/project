@@ -6,6 +6,7 @@ library(caret)
 library(pROC)
 library(ggplot2)
 library(dplyr)
+library(iml)
 
 #######################
 #init dataset
@@ -205,6 +206,8 @@ probs <- predict(best_model, newdata = test_df, type = "prob")
 imp <- importance(best_model)
 imp_sorted <- imp[order(imp[, "MeanDecreaseGini"], decreasing = TRUE), ]
 head(imp_sorted, 20)
+
+
 
 # Confusion matrix
 cm <- confusionMatrix(preds, test_df$isFraud)

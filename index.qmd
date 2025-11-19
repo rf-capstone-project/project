@@ -469,12 +469,12 @@ Table 3 presents the top features ranked by their importance in the Random Fores
 
 <p>&nbsp;</p>
 
-The Random Forest built-in functionality to assess feature importance can use variable permutation or averaging the Gini index. Both methods can produce different results. The graphs below show the first 15 ranked features and their corresponding effect on the model output based on the two measures MeanDecreaseGini(MDG) and MeanDecreaseAccuracy(MDA). Features with higher MDG were used more often, and more effectively, to split the data into purer groups. Higher MDA indicates that accuracy drops sharply when the feature is randomized.
+The Random Forest's built-in functionality to assess feature importance includes variable permutation, and a measure of how much each feature reduces the Gini impurity on average. These two methods can produce different results. The graphs below show the first 15 ranked features and their corresponding effect on the model output based on the two measures MeanDecreaseGini(MDG) and MeanDecreaseAccuracy(MDA). Features with higher MDG were used more often, and more effectively, to split the data into purer groups. Higher MDA indicates that accuracy drops sharply when the feature is randomized.
 
 <p>&nbsp;</p>
 
 
-![](images/notitle/fImpByMgini.png){} ![](images/notitle/fImpByMAcc.bmp){}
+![](images/notitle/fImpByMgini.png){} ![](images/notitle/fImpByMAcc.png){}
 
 
 

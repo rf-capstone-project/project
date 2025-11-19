@@ -442,7 +442,7 @@ The ROC curve  gives us a clear picture of how well our models separate fraudule
 
 Even though the curves all look similar, the oversampled models perform better. Balancing the data through SMOTE gives the model more examples of fraud to learn from, which leads to small but noticeable improvements in detecting fraud early on the curve. Overall, the shape of all three ROC curves suggests very high AUC values, which indicates excellent ability to rank transactions by fraud risk. This trend is consistent with findings in previous research showing that adding synthetic minority samples can help models perform better on imbalanced data.  
 
-Table 3 presents the top features ranked by their importance in the Random Forest model, measured using the MeanDecreaseGini criterion. These variables contributed the most to the model’s ability to distinguish between fraudulent and legitimate transactions, providing insight into which aspects of the data the model relied on most during prediction.  
+Table 3 presents the top features ranked by their importance in the Random Forest model, ordered by the MeanDecreaseGini criterion. These variables contributed the most to the model’s ability to distinguish between fraudulent and legitimate transactions, providing insight into which aspects of the data the model relied on most during prediction.
 
 <p>&nbsp;</p>
 
@@ -465,7 +465,18 @@ Table 3 presents the top features ranked by their importance in the Random Fores
 | card1          | 11.069711  | 30.014099  | 29.387611              | 2678.225         |
 | PC1            |  7.466844  | 12.282018  | 12.781813              | 2427.450         |
 
-    Table 3. Feature importance table by MeanDecreaseGini
+    Table 3. Feature importance table ordered by MeanDecreaseGini
+
+<p>&nbsp;</p>
+
+The Random Forest built-in functionality to assess feature importance can use variable permutation or averaging the Gini index. Both methods can produce different results. The graphs below show the first 15 ranked features and their corresponding effect on the model output based on the two measures MeanDecreaseGini(MDG) and MeanDecreaseAccuracy(MDA). Features with higher MDG were used more often, and more effectively, to split the data into purer groups. Higher MDA indicates that accuracy drops sharply when the feature is randomized.
+
+<p>&nbsp;</p>
+
+
+![](images/notitle/fImpByMgini.png){} ![](images/notitle/fImpByMAcc.bmp){}
+
+
 
 <p>&nbsp;</p>
 

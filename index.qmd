@@ -372,8 +372,8 @@ plot_value_ratio <- function(df1, df2, df3, feature, value_A, value_B,
   )
   
   ratios$dataset <- factor(ratios$dataset, levels = c("Base", "Upsampled 50%", "Upsampled 100%"))
-
-
+ 
+ # trick
 ```  
 
 The resulting datasets (original, 50% oversampled, and 100% oversampled) serve as the basis for three different Random Forest models (@fig-figure11).  

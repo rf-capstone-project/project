@@ -2829,7 +2829,9 @@ Figure 10: Correlation Matrix.
 <span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>    )</span>
 <span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>  ratios<span class="sc">$</span>dataset <span class="ot">&lt;-</span> <span class="fu">factor</span>(ratios<span class="sc">$</span>dataset, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;Base&quot;</span>, <span class="st">&quot;Upsampled 50%&quot;</span>, <span class="st">&quot;Upsampled 100%&quot;</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>  ratios<span class="sc">$</span>dataset <span class="ot">&lt;-</span> <span class="fu">factor</span>(ratios<span class="sc">$</span>dataset, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;Base&quot;</span>, <span class="st">&quot;Upsampled 50%&quot;</span>, <span class="st">&quot;Upsampled 100%&quot;</span>))</span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a> <span class="co"># trick</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>The resulting datasets (original, 50% oversampled, and 100% oversampled) serve as the basis for three different Random Forest models (<a href="#fig-figure11" class="quarto-xref">Figure 11</a>).</p>

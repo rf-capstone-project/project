@@ -11,6 +11,8 @@ course: IDC 69407 - Capstone Projects in Data Science
 bibliography: references.bib # file contains bibtex for references
 link-citations: true
 self-contained: true
+toc: true
+toc_depth: 3
 csl: apa.csl
 execute: 
   warning: false
@@ -469,18 +471,20 @@ Table 3 presents the top features ranked by their importance in the Random Fores
 
 <p>&nbsp;</p>
 
-The Random Forest built-in functionality to assess feature importance can use variable permutation or averaging the Gini index. Both methods can produce different results. The graphs below show the first 15 ranked features and their corresponding effect on the model output based on the two measures MeanDecreaseGini(MDG) and MeanDecreaseAccuracy(MDA). Features with higher MDG were used more often, and more effectively, to split the data into purer groups. Higher MDA indicates that accuracy drops sharply when the feature is randomized.
+The Random Forest built-in functionality to assess feature importance can use variable permutation or averaging the Gini index. Both methods can produce different results. ***Figure 13*** shows the first 15 ranked features and their corresponding effect on the model output based on the two measures MeanDecreaseGini(MDG) and MeanDecreaseAccuracy(MDA). Features with higher MDG were used more often, and more effectively, to split the data into purer groups. Higher MDA indicates that accuracy drops sharply when the feature is randomized.
 
 <p>&nbsp;</p>
 
 
-![](images/notitle/fImpByMgini.png){} ![](images/notitle/fImpByMAcc.bmp){}
-
-
+ <!--![](images/notitle/fImpByMgini.png){} ![](images/notitle/fImpByMAcc.bmp){}-->
+ 
+:::{.text-center} 
+![Feature importance plots.](images/notitle/AccVSginiComp.png){#fig-figure13}
+:::
 
 <p>&nbsp;</p>
 
-We also examined the confusion matrix to understand how the model performed on the test data (@fig-figure13). The model correctly identified 26,393 legitimate transactions and 1,549 fraudulent ones, which shows that it learns the general pattern of the data well. However, it also produced 189 false positives and 716 false negatives.  
+We also examined the confusion matrix to understand how the model performed on the test data (@fig-figure14). The model correctly identified 26,393 legitimate transactions and 1,549 fraudulent ones, which shows that it learns the general pattern of the data well. However, it also produced 189 false positives and 716 false negatives.  
 
 This imbalance between true positives and false negatives shows how challenging it can be to work with a dataset where fraud cases are extremely rare. While the Random Forest performs well overall, the confusion matrix makes it clear that there’s still room for improvement. Adjusting the classification threshold, experimenting with additional resampling techniques, or using cost-sensitive methods could help the model detect more fraudulent transactions and reduce the number of missed cases.  
 
@@ -501,7 +505,7 @@ This imbalance between true positives and false negatives shows how challenging 
 <p>&nbsp;</p>
 
 :::{.text-center}
-![Confusion Matrix.](images/confMatrix.png){#fig-figure13}
+![Confusion Matrix.](images/confMatrix.png){#fig-figure14}
 :::  
 
 <p>&nbsp;</p>

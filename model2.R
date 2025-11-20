@@ -202,11 +202,19 @@ preds <- predict(best_model, newdata = test_df)
 # Probabilies
 probs <- predict(best_model, newdata = test_df, type = "prob")
 
-#probs
-imp <- importance(best_model)
-imp_sorted <- imp[order(imp[, "MeanDecreaseGini"], decreasing = TRUE), ]
-head(imp_sorted, 20)
+# importance
+imp <- importance(best_model, type = 1)
 
+par(mfrow = c(1, 2), mar = c(4, 3, 3, 1))
+varImpPlot(best_model, type = 1, n.var = 15, main = "", cex = 0.9)
+# Gini importance plot (top 20 vars)
+varImpPlot(best_model,
+           type = 2,      # 2 = MeanDecreaseGini
+           n.var = 15,
+           main = "", cex = 0.9)
+
+imp_sorted <- imp[order(imp[, "MeanDecreaseAccuracy"], decreasing = TRUE), ]
+head(imp_sorted, 15)
 
 
 # Confusion matrix
@@ -225,7 +233,7 @@ spe
 f1
 
 
-
+# trick
 
 #####################
 #Model Performance AUC ROC

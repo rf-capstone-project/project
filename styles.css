@@ -1,6 +1,6 @@
 body {
   /*background-color: #F8F8F8;*/
-  background-color: #FFFFFF;
+  /*background-color: #FFFFFF;*/
 }
 
 /* Make bibliography match page background */
@@ -8,4 +8,18 @@ body {
     background-color: transparent !important;
     box-shadow: none !important;
     border: none !important;
+}
+
+.reveal .slides section {
+  padding-top: 80px;   /* adjust as needed */
+}
+
+.fig-center {
+  text-align: center;
+}
+
+.fig-center img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }

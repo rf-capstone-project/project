@@ -2328,7 +2328,7 @@ window.Quarto = {
 };
 </script>
 
-<style type="text/css">body {background-color: #FFFFFF;}#quarto-appendix, #refs, .references, .csl-bib-body, .csl-entry {background-color: transparent !important;box-shadow: none !important;border: none !important;}</style>
+<style type="text/css">body {}#quarto-appendix, #refs, .references, .csl-bib-body, .csl-entry {background-color: transparent !important;box-shadow: none !important;border: none !important;}.reveal .slides section {padding-top: 80px; }.fig-center {text-align: center;}.fig-center img {display: block;margin-left: auto;margin-right: auto;}</style>
 </head>
 
 <body class="quarto-light">
@@ -2380,7 +2380,7 @@ window.Quarto = {
 </header>
 
 
-<p><a href="https://rf-capstone-project.github.io/project/slides.html">Slides</a></p>
+<p><a href="slides.html">Slides</a> <!---(https://rf-capstone-project.github.io/project/slides.html)---></p>
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
 <p>Modern data problems often involve large and noisy datasets where simple predictive models fail to capture complex patterns. Random Forests address these challenges by combining the strengths of many decision trees into one powerful ensemble, providing a scalable approach across a wide range of domains, and is commonly used for classification and regression tasks. First developed in the late 1990s and popularized in the early 2000s, Random Forests (RF) improve predictive performance by aggregating the outputs of multiple decision trees built from randomly sampled subsets of data. In general, the popularity of tree-based methods in machine learning has increased exponentially, due to their capacity to produce reliable and readable results, while being flexible on the type of data they can handle <span class="citation" data-cites="Louppe2015">(<a href="#ref-Louppe2015" role="doc-biblioref">Louppe, 2015</a>)</span>. Random Forest’s acceptance is also supported by the fact that it allows clearly defined criteria to be analyzed and does not behave as a black box. This is ideal for domains that often deal with regulatory scrutiny or have a need to develop deeper insights into their classification process. The success of RFs is also explained based on the following factors <span class="citation" data-cites="Louppe2015">(<a href="#ref-Louppe2015" role="doc-biblioref">Louppe, 2015</a>)</span>:</p>
@@ -2437,8 +2437,9 @@ Figure 1: A Binary classification tree. (adapted from Louppe, 2015, inspired by
 <p>The bootstrap setting determines whether sampling occurs with replacement when generating training subsets for each tree. While this behavior is standard, not using bootstrapping can be useful in smaller datasets where more unique samples may be wanted. In practice, methods such as grid search and randomized search are commonly used to evaluate combinations of these hyperparameters, improving model accuracy and robustness in a systematic way <span class="citation" data-cites="Probst2019">(<a href="#ref-Probst2019" role="doc-biblioref">Probst, 2019</a>)</span>.</p>
 <p><strong><em>Splitting Criteria</em></strong></p>
 <p>Classification Impurity function based on the Shannon Entropy (Shannon and Weaver, 1949, as cited in <span class="citation" data-cites="Louppe2015">(<a href="#ref-Louppe2015" role="doc-biblioref">Louppe, 2015</a>)</span>):</p>
-<p><span class="math display">\[  i_H(t)=-\sum_{k=1}^{J}p(c_k|t)log_2(p(c_k|t))  \]</span> Impurity function based on the Gini index (Gini, 1912, as cited in <span class="citation" data-cites="Louppe2015">(<a href="#ref-Louppe2015" role="doc-biblioref">Louppe, 2015</a>)</span>:</p>
-<p><span class="math display">\[  i_G(t)=-\sum_{k=1}^{J}p(c_k|t)(1-p(c_k|t))  \]</span></p>
+<p><span class="math display">\[  i_H(t)=-\sum_{k=1}^{J}p(c_k|t)log_2(p(c_k|t))  \]</span></p>
+<p>Impurity function based on the Gini index (Gini, 1912, as cited in <span class="citation" data-cites="Louppe2015">(<a href="#ref-Louppe2015" role="doc-biblioref">Louppe, 2015</a>)</span>:</p>
+<p><span class="math display">\[  i_G(t)=\sum_{k=1}^{J}p(c_k|t)(1-p(c_k|t))  \]</span></p>
 <p><strong><em>Approaches to class imbalance</em></strong></p>
 <ul>
 <li><p>Applying Weights: Higher weights are assigned to the minority class and incorporated into the Gini index, affecting both the choice of splits and the weighting of terminal nodes in each tree <span class="citation" data-cites="Valavi2021">(<a href="#ref-Valavi2021" role="doc-biblioref">Roozbeh et al., 2021</a>)</span>.</p></li>

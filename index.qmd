@@ -4,6 +4,7 @@ authors: Jessica Cramer, Hunter Hillis, Murpys D. Mendez
 date: 2025-10-25
 format:
   html:
+    theme: default
     code-fold: true
     number-sections: false
     css: styles.css 
@@ -19,7 +20,8 @@ execute:
   message: false
 ---
 
-[Slides](https://rf-capstone-project.github.io/project/slides.html)
+[Slides](slides.html)
+<!---(https://rf-capstone-project.github.io/project/slides.html)--->
 
 ## Introduction
 
@@ -96,9 +98,10 @@ Classification
 Impurity function based on the Shannon Entropy  (Shannon and Weaver, 1949, as cited in [@Louppe2015]):
 
 $$  i_H(t)=-\sum_{k=1}^{J}p(c_k|t)log_2(p(c_k|t))  $$
+
 Impurity function based on the Gini index (Gini, 1912, as cited in [@Louppe2015]:
 
-$$  i_G(t)=-\sum_{k=1}^{J}p(c_k|t)(1-p(c_k|t))  $$
+$$  i_G(t)=\sum_{k=1}^{J}p(c_k|t)(1-p(c_k|t))  $$
 
 ***Approaches to class imbalance***
 
@@ -523,5 +526,4 @@ Our analysis showed that balancing the data helped the model better identify fra
 
 
 ## References
-
 

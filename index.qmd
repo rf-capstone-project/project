@@ -1,10 +1,13 @@
 ---
 title: "Exploring Fraud Detection - An Analysis of the Random Forest Algorithm in Credit Card Transactions"
-authors: Jessica Cramer, Hunter Hillis, Murpys D. Mendez
-date: 2025-10-25
+author:
+ - name: Jessica Cramer
+ - name: Hunter Hillis
+ - name: Murpys Mendez
+date: 12-02-2025
 format:
   html:
-    theme: default
+    theme: flatly
     code-fold: true
     number-sections: false
     css: styles.css 
@@ -20,8 +23,9 @@ execute:
   message: false
 ---
 
-[Slides](slides.html)
-<!---(https://rf-capstone-project.github.io/project/slides.html)--->
+<!--[Slides](slides.html)-->
+[Slides](slides.html){.btn .btn-dark}
+
 
 ## Introduction
 
@@ -255,7 +259,7 @@ Following data preprocessing, the distribution of the target variable between it
 <p>&nbsp;</p>
 
 :::{.text-center}
-![Count of target variable per level.](images/notitle/fraudLevels.png){#fig-figure3}
+![Count of target variable per level.](images/notitle/fraudLevels2.png){#fig-figure3}
 :::  
 
 <p>&nbsp;</p>
@@ -328,7 +332,7 @@ A few product types account for most fraud cases, pointing toward specific produ
 ***Correlation Analysis.*** To explore the relationships among numeric variables, a correlation matrix was computed. This visualization helps identify pairs of features that move together, revealing potential multicollinearity or redundant predictors. Strong positive or negative correlations highlight variables that may carry overlapping information, which can inform feature selection and model simplification.
 
 :::{.text-center}
-![Correlation Matrix.](images/corrmatrix.png){#fig-figure10}
+![Correlation Matrix.](images/notitle/corrmatrix2.png){#fig-figure10}
 
 :::  
 
@@ -434,6 +438,8 @@ for (i in 1:nrow(param_grid)) {
 ```  
 Using the optimized settings (*mtree=50*, *ntry=5*), three Random Forest models are trained: one on the original data, one on the 50% oversampled data, and one on the fully balanced data. These tests allowed us to identify that the best performing models were the ones with fewer trees and fewer features considered at each split, rather than those with larger values for these parameters. 
 
+***Model Evaluation***
+
 The ROC curve  gives us a clear picture of how well our models separate fraudulent transactions from legitimate ones (@fig-figure12). As shown in the graph, the three versions of the data performed relatively well. Their curves all rise quickly toward the top-left corner, which means they achieve high true positive rates even when the false positive rate is low.  
 
 <p>&nbsp;</p>
@@ -501,6 +507,7 @@ This imbalance between true positives and false negatives shows how challenging 
 | Recall       | 0.9934     |
 | Specificity  | 0.6830     |
 | F1 Score     | 0.9834     |
+| AUC          | 0.9597     |
 
 
     Table 4. Performance metrics

@@ -23,3 +23,12 @@ body {
   margin-left: auto;
   margin-right: auto;
 }
+
+.fig-bordered img {
+  border: 1px solid grey;
+ 
+}
+
+.reveal .slides section.title-slide h1.title {
+  font-size: 3em !important;      /* makes title smaller or bigger */
+}

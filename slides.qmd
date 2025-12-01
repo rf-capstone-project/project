@@ -97,7 +97,7 @@ execute:
   - Regression: average of the tree predictions
 
 
-## Splitting criteria
+## Splitting Criteria
 
 <p>&nbsp;</p>
 
@@ -139,7 +139,7 @@ Commonly tuned parameters are:
 Grid and randomized search are commonly used for hyperparameters tuning, improving model accuracy and robustness in a systematic way [@Probst2019]
 
 
-## Class imbalance
+## Class Imbalance
 
 <p>&nbsp;</p>
 
@@ -211,7 +211,7 @@ Commonly used, Synthetic Minority Over-Sampling Technique (SMOTE) generates synt
 ![Oversampling ratio](images/oversamplingRatio.png){#fig-figure4}
 :::
 
-## Optimizing the model
+## Optimizing the Model
 
 Hyper-parameters used for tuning the model:
 
@@ -334,7 +334,7 @@ Feature importance analysis revealed the top features ranked by their importance
 
 
 
-## Findings From This Project
+## Findings From this Project
 <br>
 
 - Applying Random Forest to the dataset showed how preprocessing affects results
